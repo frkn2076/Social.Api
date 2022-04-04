@@ -20,7 +20,6 @@ public class ActivityController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        await _socialRepository.Create();
         return Ok("Works properly!");
     }
 }

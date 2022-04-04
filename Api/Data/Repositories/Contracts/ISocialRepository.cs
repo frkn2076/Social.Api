@@ -1,8 +1,9 @@
-﻿using System.Data;
+﻿using Api.Data.Entities;
+using System.Data;
 
 namespace Api.Data.Repositories.Contracts;
 
 public interface ISocialRepository
 {
-    Task Create();
+    Task CreateProfileAsync(Profile profile, IDbTransaction transaction = null);
 }

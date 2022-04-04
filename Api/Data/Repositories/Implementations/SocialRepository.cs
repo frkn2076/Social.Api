@@ -1,4 +1,5 @@
 ﻿using Api.Data.Contracts;
+using Api.Data.Entities;
 using Api.Data.Repositories.Contracts;
 using Api.Utils;
 using Dapper;
@@ -17,16 +18,16 @@ public class SocialRepository : ISocialRepository
         _connectionService = connectionService;
     }
 
-    public async Task Create()
+    public async Task CreateProfileAsync(Profile profile, IDbTransaction transaction = null)
     {
-        await PostgresConnection.ExecuteAsync(GetQuery(Queries.CreateActivityTable));
+        await PostgresConnection.ExecuteAsync(GetQuery(Queries.CreateProfileQuery), profile, transaction: transaction);
     }
 
     private string GetQuery(string queryFileName)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
         var path = Path.Combine(currentDirectory, Queries.AdhocFolderPath);
-        var file = Path.Combine(queryFileName, Queries.SqlFileExtension);
+        var file = string.Concat(queryFileName, Queries.SqlFileExtension);
         return FileResourceUtility.LoadResource(path, file);
     }
 }
