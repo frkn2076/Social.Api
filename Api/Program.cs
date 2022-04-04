@@ -1,11 +1,13 @@
+using Api;
+using Api.Data.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.ConfigureServices();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var serviceProvider = builder.Services.BuildServiceProvider();
+var connectionService = serviceProvider.GetRequiredService<IConnectionService>();
+connectionService.GetPostgresConnection().CreateSchemes();
 
 var app = builder.Build();
 

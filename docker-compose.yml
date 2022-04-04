@@ -4,17 +4,17 @@ services:
   socialapi:
     image: 'socialapi'
     container_name: 'socialapi-container'
-    build: .
+    build: Api/.
     ports:
       - '8080:80'
     depends_on:
       - socialdb
     networks:
-      - socialdb-network
+      - social-network
       
-  registerdb:
+  socialdb:
     image: 'postgres:13-alpine'
-    container_name: 'registerdb-container'
+    container_name: 'socialdb-container'
     environment:
       - POSTGRES_DB='socialdb'
       - POSTGRES_USER='postgres'
