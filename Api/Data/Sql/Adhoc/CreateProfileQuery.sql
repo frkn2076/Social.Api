@@ -1,10 +1,14 @@
 ﻿INSERT INTO public.profile
 	      ( UserName
 		  , Email
-		  , Password
+		  , password
+		  , name
+		  , surname
 		  , Photo )
 	 VALUES 
 	      ( @userName
 		  , @email
 		  , @password
+		  , @name
+		  , @surname
 		  , @photo )

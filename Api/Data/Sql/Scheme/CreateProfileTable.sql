@@ -2,6 +2,8 @@
     id serial PRIMARY KEY,
     username VARCHAR (100) UNIQUE NULL,
     email VARCHAR (100) UNIQUE NOT NULL,
+    name VARCHAR (20) UNIQUE NULL,
+    surname VARCHAR (20) UNIQUE NULL,
     password VARCHAR (100) NOT NULL,
     photo VARCHAR(1000) NULL
 );

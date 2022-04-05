@@ -23,6 +23,13 @@ public class SocialRepository : ISocialRepository
         await PostgresConnection.ExecuteAsync(GetQuery(Queries.CreateProfileQuery), profile, transaction: transaction);
     }
 
+    public async Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null)
+    {
+        return await PostgresConnection.QueryFirstAsync<string>(GetQuery(Queries.GetPasswordQuery), new { email }, transaction: transaction);
+    }
+
+    #region Helper
+
     private string GetQuery(string queryFileName)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
@@ -30,4 +37,6 @@ public class SocialRepository : ISocialRepository
         var file = string.Concat(queryFileName, Queries.SqlFileExtension);
         return FileResourceUtility.LoadResource(path, file);
     }
+
+    #endregion Helper
 }

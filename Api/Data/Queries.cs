@@ -20,7 +20,9 @@ public static class Queries
 
     #region Queries
 
-    public static string CreateProfileQuery = nameof(CreateProfileQuery);
+    public static string CreateProfileQuery = nameof(CreateProfileQuery);,
+
+    public static string GetPasswordQuery = nameof(GetPasswordQuery);
 
     #endregion Queries
 }
