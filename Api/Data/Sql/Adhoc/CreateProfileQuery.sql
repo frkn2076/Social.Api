@@ -1,14 +1,18 @@
 ﻿INSERT INTO public.profile
-	      ( UserName
-		  , Email
+	      ( userName
+		  , email
 		  , password
 		  , name
 		  , surname
-		  , Photo )
+		  , photo 
+		  , refreshToken
+		  , expireDate )
 	 VALUES 
 	      ( @userName
 		  , @email
 		  , @password
 		  , @name
 		  , @surname
-		  , @photo )
+		  , @photo
+		  , @refreshToken
+		  , @expireDate)
