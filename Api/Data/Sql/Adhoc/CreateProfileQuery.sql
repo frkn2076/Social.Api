@@ -16,3 +16,4 @@
 		  , @photo
 		  , @refreshToken
 		  , @expireDate)
+  RETURNING *

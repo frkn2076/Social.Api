@@ -5,7 +5,7 @@ namespace Api.Data.Repositories.Contracts;
 
 public interface ISocialRepository
 {
-    Task CreateProfileAsync(Profile profile, IDbTransaction transaction = null);
+    Task<Profile> CreateProfileAsync(Profile profile, IDbTransaction transaction = null);
 
     Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null);
 
@@ -13,5 +13,5 @@ public interface ISocialRepository
 
     Task<Profile> GetProfileByUserNameAsync(string userName, IDbTransaction transaction = null);
 
-    Task UpdateRefreshTokenAsync(int id, string refreshToken, DateTime expireDate, IDbTransaction transaction = null);
+    Task<bool> UpdateRefreshTokenAsync(int id, string refreshToken, DateTime expireDate, IDbTransaction transaction = null);
 }

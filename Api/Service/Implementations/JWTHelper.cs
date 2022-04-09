@@ -23,7 +23,7 @@ public class JWTHelper
         _socialRepository = socialRepository;
         _secretKey = "SECRET KEY";
         _accessExpireDate = 60;
-        _refreshExpireDate = 600;
+        _refreshExpireDate = 6000;
     }
 
     public async Task<ServiceResponse> GenerateTokenByRefreshToken(string refreshToken)
@@ -38,7 +38,7 @@ public class JWTHelper
             };
         }
 
-        if(user.ExpireDate.AddMinutes(_refreshExpireDate) < DateTime.Now)
+        if(user.ExpireDate.AddMinutes(_refreshExpireDate) < DateTime.UtcNow)
         {
             return new ServiceResponse()
             {
@@ -46,7 +46,7 @@ public class JWTHelper
             };
         }
 
-        var token = await GenerateJwtToken(user, _refreshExpireDate);
+        var token = await GenerateJwtToken(user);
         var newRefreshToken = GenerateRefreshToken();
 
         var response = new AuthenticationResponseModel()
@@ -86,9 +86,11 @@ public class JWTHelper
             };
         }
 
-        var token = await GenerateJwtToken(user, 60);
+        var token = await GenerateJwtToken(user);
 
         var refreshToken = GenerateRefreshToken();
+
+        await _socialRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMinutes(_refreshExpireDate));
 
         var response = new AuthenticationResponseModel()
         {
@@ -106,7 +108,7 @@ public class JWTHelper
     }
 
 
-    public async Task<string> GenerateJwtToken(Profile user, int expireMinutes)
+    public async Task<string> GenerateJwtToken(Profile user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_secretKey);
@@ -118,7 +120,7 @@ public class JWTHelper
                 new Claim("username", user.UserName), 
                 new Claim("email", user.Email), 
             }),
-            Expires = DateTime.UtcNow.AddMinutes(expireMinutes),
+            Expires = DateTime.UtcNow.AddMinutes(_accessExpireDate),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -162,13 +164,6 @@ public class JWTHelper
         var randomBytes = new byte[64];
         rng.GetBytes(randomBytes);
         return Convert.ToBase64String(randomBytes);
-    }
-
-    private async Task<bool> ValidatePassword(string email, string userPassword)
-    {
-        var password = await _socialRepository.GetPasswordAsync(email);
-        var encryptedUserPassword = CryptoHelper.EncryptPassword(userPassword);
-        return password == encryptedUserPassword;
     }
 
     #endregion Helper

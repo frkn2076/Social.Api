@@ -18,9 +18,9 @@ public class SocialRepository : ISocialRepository
         _connectionService = connectionService;
     }
 
-    public async Task CreateProfileAsync(Profile profile, IDbTransaction transaction = null)
+    public async Task<Profile> CreateProfileAsync(Profile profile, IDbTransaction transaction = null)
     {
-        await PostgresConnection.ExecuteAsync(GetQuery(Queries.CreateProfileQuery), profile, transaction: transaction);
+        return await PostgresConnection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.CreateProfileQuery), profile, transaction: transaction);
     }
 
     public async Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null)
@@ -30,18 +30,19 @@ public class SocialRepository : ISocialRepository
 
     public async Task<Profile> GetProfileByRefreshTokenAsync(string refreshToken, IDbTransaction transaction = null)
     {
-        return await PostgresConnection.QueryFirstAsync<Profile>(GetQuery(Queries.GetProfileByRefreshTokenQuery), new { refreshToken }, transaction: transaction);
+        return await PostgresConnection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.GetProfileByRefreshTokenQuery), new { refreshToken }, transaction: transaction);
     }
 
     public async Task<Profile> GetProfileByUserNameAsync(string userName, IDbTransaction transaction = null)
     {
-        return await PostgresConnection.QueryFirstAsync<Profile>(GetQuery(Queries.GetProfileByUserNameQuery), new { userName }, transaction: transaction);
+        return await PostgresConnection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.GetProfileByUserNameQuery), new { userName }, transaction: transaction);
     }
 
-    public async Task UpdateRefreshTokenAsync(int id, string refreshToken, DateTime expireDate, IDbTransaction transaction = null)
+    public async Task<bool> UpdateRefreshTokenAsync(int id, string refreshToken, DateTime expireDate, IDbTransaction transaction = null)
     {
-        await PostgresConnection.ExecuteAsync(GetQuery(Queries.UpdateRefreshTokenQuery), new { id, refreshToken, expireDate },
+        var affectedRows = await PostgresConnection.ExecuteAsync(GetQuery(Queries.UpdateRefreshTokenQuery), new { id, refreshToken, expireDate },
             transaction: transaction);
+        return affectedRows > 0;
     }
 
     #region Helper

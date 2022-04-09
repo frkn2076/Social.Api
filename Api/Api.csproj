@@ -8,12 +8,12 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 	
-	<ItemGroup>
+	<!--<ItemGroup>
 		<None Remove="appsettings.json" />
 		<None Remove="appsettings.Development.json" />
 		<None Remove="appsettings.Production.json" />
 		<None Remove="Data\Sql\Scheme\CreateActivityTable.sql" />
-	</ItemGroup>
+	</ItemGroup>-->
 
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.0.123" />
@@ -24,14 +24,10 @@
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<!--<ItemGroup>
 		<Content Include="Data\Sql\Scheme\CreateActivityTable.sql">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="ViewModels\Request\" />
-	</ItemGroup>
+	</ItemGroup>-->
 	
 </Project>

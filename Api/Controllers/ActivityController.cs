@@ -1,11 +1,14 @@
 using Api.Data.Contracts;
 using Api.Data.Repositories.Contracts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ActivityController : ControllerBase
 {
     private readonly ILogger<ActivityController> _logger;
@@ -20,6 +23,6 @@ public class ActivityController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        return Ok("Works properly!");
+        return Ok($"{nameof(ActivityController)} works properly!");
     }
 }

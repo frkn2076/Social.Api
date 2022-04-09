@@ -1,12 +1,15 @@
 using Api.Data.Entities;
 using Api.Data.Repositories.Contracts;
 using Api.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ProfileController : ControllerBase
 {
     private readonly ILogger<ProfileController> _logger;
@@ -21,7 +24,7 @@ public class ProfileController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok("Works properly!");
+        return Ok($"{nameof(ProfileController)} works properly!");
     }
 
     [HttpGet("dbtest")]
@@ -34,7 +37,7 @@ public class ProfileController : ControllerBase
             Password = "12345"
         };
 
-        await _socialRepository.CreateProfileAsync(response);
+        var a = await _socialRepository.CreateProfileAsync(response);
 
         return Ok("Works properly!");
     }
