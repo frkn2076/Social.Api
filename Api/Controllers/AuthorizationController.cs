@@ -1,5 +1,6 @@
 using Api.Infra;
 using Api.Service.Contracts;
+using Api.Utils.Constants;
 using Api.ViewModels.Request;
 using Api.ViewModels.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -40,9 +41,9 @@ public class AuthorizationController : ControllerBase
     }
 
     [HttpGet("refresh")]
-    public async Task<IActionResult> Refresh(RegisterRequestModel request)
+    public async Task<IActionResult> Refresh()
     {
-        var refreshToken = HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "RefreshToken").Value;
+        var refreshToken = HttpContext.Request.Headers.FirstOrDefault(x => x.Key == Headers.RefreshToken).Value;
         if (string.IsNullOrEmpty(refreshToken))
         {
             return BadRequest();

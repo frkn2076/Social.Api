@@ -1,6 +1,6 @@
-﻿namespace Api.Utils;
+﻿namespace Api.Utils.Constants;
 
-public static class Constants
+public static class ErrorMessages
 {
     public const string UserNotFound = "User not found";
 

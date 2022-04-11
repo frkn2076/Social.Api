@@ -3,8 +3,10 @@ using Api.Data.Repositories.Contracts;
 using Api.Helper;
 using Api.Infra;
 using Api.Service.Contracts;
-using Api.Utils;
+using Api.Utils.Constants;
+using Api.Utils.Models;
 using Api.ViewModels.Response;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,24 +18,22 @@ namespace Api.Service.Implementations;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly ISocialRepository _socialRepository;
-    private readonly string _secretKey;
-    private readonly int _accessExpireDate;
-    private readonly int _refreshExpireDate;
+    private readonly JWTSettings _jwtSettings;
 
-    public AuthenticationService(ISocialRepository socialRepository)
+    public AuthenticationService(ISocialRepository socialRepository, IOptions<JWTSettings> jwtSettings)
     {
         _socialRepository = socialRepository;
-        _secretKey = "SECRET KEY";
-        _accessExpireDate = 60;
-        _refreshExpireDate = 6000;
+        _jwtSettings = jwtSettings.Value;
     }
 
     public async Task<ServiceResponse<AuthenticationResponseModel>> Register(string userName, string userPassword)
     {
+        var encryptedPassword = CryptoHelper.EncryptPassword(userPassword);
+
         var profile = new Profile()
         {
             UserName = userName,
-            Password = userPassword
+            Password = encryptedPassword
         };
 
         var existingUser = await _socialRepository.GetProfileByUserNameAsync(userName);
@@ -42,17 +42,17 @@ public class AuthenticationService : IAuthenticationService
         {
             return new()
             {
-                Error = Constants.UserNotFound
+                Error = ErrorMessages.UserNotFound
             };
         }
 
         var createdProfile = await _socialRepository.CreateProfileAsync(profile);
 
-        if (createdProfile?.Id == null)
+        if (createdProfile == null)
         {
             return new()
             {
-                Error = Constants.OperationHasFailed
+                Error = ErrorMessages.OperationHasFailed
             };
         }
 
@@ -67,7 +67,7 @@ public class AuthenticationService : IAuthenticationService
         {
             return new()
             {
-                Error = Constants.UserNotFound
+                Error = ErrorMessages.UserNotFound
             };
         }
 
@@ -77,7 +77,7 @@ public class AuthenticationService : IAuthenticationService
         {
             return new()
             {
-                Error = Constants.WrongPassword
+                Error = ErrorMessages.WrongPassword
             };
         }
 
@@ -92,29 +92,29 @@ public class AuthenticationService : IAuthenticationService
         {
             return new()
             {
-                Error = Constants.UserNotFound
+                Error = ErrorMessages.UserNotFound
             };
         }
 
-        if (user.ExpireDate.AddMinutes(_refreshExpireDate) < DateTime.UtcNow)
+        if (user.ExpireDate.AddMinutes(_jwtSettings.RefreshExpireDate) < DateTime.UtcNow)
         {
             return new()
             {
-                Error = Constants.TokenExpired
+                Error = ErrorMessages.TokenExpired
             };
         }
 
-        var token = await GenerateJwtToken(user);
+        var token = GenerateJwtToken(user);
         var newRefreshToken = GenerateRefreshToken();
 
-        await _socialRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMinutes(_refreshExpireDate));
+        await _socialRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshExpireDate));
 
         var response = new AuthenticationResponseModel()
         {
             AccessToken = token,
-            AccessTokenExpireDate = _accessExpireDate,
+            AccessTokenExpireDate = _jwtSettings.AccessExpireDate,
             RefreshToken = newRefreshToken,
-            RefreshTokenExpireDate = _refreshExpireDate
+            RefreshTokenExpireDate = _jwtSettings.RefreshExpireDate
         };
 
         return new()
@@ -128,18 +128,18 @@ public class AuthenticationService : IAuthenticationService
 
     private async Task<ServiceResponse<AuthenticationResponseModel>> GenerateTokenByCredentialsAsync(Profile user)
     {
-        var token = await GenerateJwtToken(user);
+        var token = GenerateJwtToken(user);
 
         var refreshToken = GenerateRefreshToken();
 
-        await _socialRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMinutes(_refreshExpireDate));
+        await _socialRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshExpireDate));
 
         var response = new AuthenticationResponseModel()
         {
             AccessToken = token,
-            AccessTokenExpireDate = _accessExpireDate,
+            AccessTokenExpireDate = _jwtSettings.AccessExpireDate,
             RefreshToken = refreshToken,
-            RefreshTokenExpireDate = _refreshExpireDate
+            RefreshTokenExpireDate = _jwtSettings.RefreshExpireDate
         };
 
         return new()
@@ -149,19 +149,29 @@ public class AuthenticationService : IAuthenticationService
         };
     }
 
-    private async Task<string> GenerateJwtToken(Profile user)
+    private string GenerateJwtToken(Profile user)
     {
+        var claims = new List<Claim>()
+        {
+            new Claim(ClaimNames.Id, user.Id.ToString())
+        };
+
+        if (!string.IsNullOrEmpty(user.UserName))
+        {
+            claims.Add(new Claim(ClaimNames.UserName, user.UserName));
+        }
+
+        if (!string.IsNullOrEmpty(user.Email))
+        {
+            claims.Add(new Claim(ClaimNames.Email, user.Email));
+        }
+
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_secretKey);
+        var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                new Claim("id", user.Id.ToString()),
-                new Claim("username", user.UserName),
-                new Claim("email", user.Email),
-            }),
-            Expires = DateTime.UtcNow.AddMinutes(_accessExpireDate),
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessExpireDate),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);

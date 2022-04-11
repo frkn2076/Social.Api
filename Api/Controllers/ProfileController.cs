@@ -4,6 +4,7 @@ using Api.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Api.Controllers;
 
@@ -30,6 +31,8 @@ public class ProfileController : ControllerBase
     [HttpGet("dbtest")]
     public async Task<IActionResult> DbTest()
     {
+        var claimsIdentity = HttpContext.User.Identity as ClaimsIdentity;
+
         var response = new Profile()
         {
             UserName = "Furkan",

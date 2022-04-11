@@ -1,7 +1,6 @@
-﻿SELECT 
-     ( id
+﻿SELECT id
      , username
      , email
-     , password )
+     , password
   FROM public.profile
  WHERE refreshToken = @refreshToken

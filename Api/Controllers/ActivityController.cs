@@ -13,16 +13,25 @@ public class ActivityController : ControllerBase
 {
     private readonly ILogger<ActivityController> _logger;
     private readonly ISocialRepository _socialRepository;
+    private readonly CurrentUser _currentUser;
 
-    public ActivityController(ILogger<ActivityController> logger, ISocialRepository socialRepository)
+    public ActivityController(ILogger<ActivityController> logger, ISocialRepository socialRepository, CurrentUser currentUser)
     {
         _logger = logger;
         _socialRepository = socialRepository;
+        _currentUser = currentUser;
     }
 
     [HttpGet]
     public async Task<IActionResult> Get()
     {
+        return Ok($"{nameof(ActivityController)} works properly!");
+    }
+    
+    [HttpGet("claimtest")]
+    public async Task<IActionResult> ClaimTest()
+    {
+
         return Ok($"{nameof(ActivityController)} works properly!");
     }
 }

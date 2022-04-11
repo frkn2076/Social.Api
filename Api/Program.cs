@@ -3,7 +3,7 @@ using Api.Data.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureServices();
+builder.ConfigureServices();
 
 var serviceProvider = builder.Services.BuildServiceProvider();
 var connectionService = serviceProvider.GetRequiredService<IConnectionService>();

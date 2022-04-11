@@ -12,6 +12,10 @@ public class Profile
     
     public string Photo { get; set; }
 
+    public string Name { get; set; }
+
+    public string Surname { get; set; }
+
     public string RefreshToken { get; set; }
 
     public DateTime ExpireDate { get; set; }
