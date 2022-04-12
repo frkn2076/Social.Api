@@ -24,10 +24,6 @@
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.16.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Extensions\" />
-	</ItemGroup>
-
 	<!--<ItemGroup>
 		<Content Include="Data\Sql\Scheme\CreateActivityTable.sql">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -1,5 +1,6 @@
 ﻿using Api.Data.Entities;
 using Api.Data.Repositories.Contracts;
+using Api.Enums;
 using Api.Helper;
 using Api.Infra;
 using Api.Service.Contracts;
@@ -42,7 +43,7 @@ public class AuthenticationService : IAuthenticationService
         {
             return new()
             {
-                Error = ErrorMessages.UserNotFound
+                Error = ErrorMessages.UserAlreadyExists
             };
         }
 
@@ -132,8 +133,6 @@ public class AuthenticationService : IAuthenticationService
 
         var refreshToken = GenerateRefreshToken();
 
-        await _socialRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshExpireDate));
-
         var response = new AuthenticationResponseModel()
         {
             AccessToken = token,
@@ -153,17 +152,22 @@ public class AuthenticationService : IAuthenticationService
     {
         var claims = new List<Claim>()
         {
-            new Claim(ClaimNames.Id, user.Id.ToString())
+            new Claim(ClaimTypes.SerialNumber, user.Id.ToString())
         };
 
         if (!string.IsNullOrEmpty(user.UserName))
         {
-            claims.Add(new Claim(ClaimNames.UserName, user.UserName));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserName));
         }
 
         if (!string.IsNullOrEmpty(user.Email))
         {
-            claims.Add(new Claim(ClaimNames.Email, user.Email));
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+        }
+
+        if(!string.IsNullOrEmpty(user.Role))
+        {
+            claims.Add(new Claim(ClaimTypes.Role, user.Role));
         }
 
         var tokenHandler = new JwtSecurityTokenHandler();

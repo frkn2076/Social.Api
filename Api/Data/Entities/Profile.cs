@@ -1,4 +1,6 @@
-﻿namespace Api.Data.Entities;
+﻿using Api.Enums;
+
+namespace Api.Data.Entities;
 
 public class Profile
 {
@@ -19,4 +21,6 @@ public class Profile
     public string RefreshToken { get; set; }
 
     public DateTime ExpireDate { get; set; }
+
+    public string Role { get; set; } = Roles.User;
 }

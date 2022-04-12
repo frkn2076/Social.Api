@@ -1,8 +1,10 @@
 ﻿using Api.Data;
 using Api.Data.Contracts;
+using Api.Data.Entities;
 using Api.Data.Implementations;
 using Api.Data.Repositories.Contracts;
 using Api.Data.Repositories.Implementations;
+using Api.Enums;
 using Api.Service.Contracts;
 using Api.Service.Implementations;
 using Api.Utils;
@@ -27,7 +29,6 @@ public static class Setup
         services.AddSwaggerGen();
 
         services.AddHttpContextAccessor();
-        services.RegisterJWTAuthorization();
 
         services.AddSession(option =>
         {
@@ -37,9 +38,7 @@ public static class Setup
         services.AddDistributedMemoryCache();
 
         services.Configure<JWTSettings>(builder.Configuration.GetSection(nameof(JWTSettings)));
-
-        var jwtSettings = new JWTSettings();
-        builder.Configuration.GetSection(nameof(JWTSettings)).Bind(jwtSettings);
+        services.Configure<AdminCredentials>(builder.Configuration.GetSection(nameof(AdminCredentials)));
 
         services.AddTransient<IConnectionService, ConnectionService>();
         services.AddTransient<ISocialRepository, SocialRepository>();
@@ -48,6 +47,10 @@ public static class Setup
         services.AddTransient<IProfileService, ProfileService>();
 
         services.AddScoped<CurrentUser>();
+
+        var jwtSettings = new JWTSettings();
+        builder.Configuration.GetSection(nameof(JWTSettings)).Bind(jwtSettings);
+        services.RegisterJWTAuthorization(jwtSettings);
     }
 
     public static async void CreateSchemes(this IDbConnection dbConnection)
@@ -65,9 +68,23 @@ public static class Setup
         transaction.Commit();
     }
 
-    private static void RegisterJWTAuthorization(this IServiceCollection services)
+    public static async Task TempAdminCredentialsRegisterAsync(this ISocialRepository socialRepository, AdminCredentials adminCredentials)
     {
-        var key = Encoding.ASCII.GetBytes("SECRET KEY SECRET KEY SECRET KEY SECRET KEY");
+        var admin = new Profile()
+        {
+            UserName = adminCredentials.UserName,
+            Password = adminCredentials.EncryptedPassword,
+            Role = Roles.Admin
+        };
+
+        await socialRepository.CreateProfileAsync(admin);
+    }
+
+    #region Helper
+
+    private static void RegisterJWTAuthorization(this IServiceCollection services, JWTSettings settings)
+    {
+        var key = Encoding.ASCII.GetBytes(settings.SecretKey);
         services.AddAuthentication(x => {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -84,4 +101,13 @@ public static class Setup
             };
         });
     }
+
+    private static T GetOptions<T>(this WebApplicationBuilder builder) where T : new()
+    {
+        var t = new T();
+        builder.Configuration.GetSection(nameof(T)).Bind(t);
+        return t;
+    }
+
+    #endregion Helper
 }

@@ -1,4 +1,4 @@
-﻿using Api.Utils.Constants;
+﻿using Api.Enums;
 using System.Security.Claims;
 
 namespace Api;
@@ -14,18 +14,23 @@ public class CurrentUser
 
     public int GetId()
     {
-        var idClaim = _claimsIdentity.FindFirst(ClaimNames.Id)?.Value;
+        var idClaim = _claimsIdentity.FindFirst(ClaimTypes.SerialNumber)?.Value;
         int.TryParse(idClaim, out int id);
         return id;
     }
 
     public string? GetUserName()
     {
-        return _claimsIdentity.FindFirst(ClaimNames.UserName)?.Value;
+        return _claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
     public string? GetEmail()
     {
-        return _claimsIdentity.FindFirst(ClaimNames.Email)?.Value;
+        return _claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
+    }
+
+    public bool IsAdmin()
+    {
+        return _claimsIdentity.FindFirst(ClaimTypes.Role)?.Value == Roles.Admin;
     }
 }

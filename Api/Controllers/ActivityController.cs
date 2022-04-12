@@ -29,10 +29,12 @@ public class ActivityController : ExtendedControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
+        var a = _currentUser.GetId();
+        var b = _currentUser.IsAdmin();
         return Ok($"{nameof(ActivityController)} works properly!");
     }
     
-    [HttpGet("all/{isRefresh}")]
+    [HttpGet("all/{isRefresh?}")]
     public async Task<IActionResult> GetActivities(bool isRefresh)
     {
         var skip = HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
@@ -42,8 +44,6 @@ public class ActivityController : ExtendedControllerBase
         skip += ACTIVITY_PAGINATION_COUNT;
 
         HttpContext.Session.SetInt32(SessionItems.ActivitySkipKey, skip);
-
-        //HttpContext.Session.CommitAsync();
 
         return Ok($"{nameof(ActivityController)} works properly!");
     }

@@ -7,5 +7,6 @@
     password VARCHAR (100) NOT NULL,
     photo VARCHAR(1000) NULL,
     refreshToken VARCHAR(1000) NULL,
-    expireDate timestamp default NULL
+    expireDate timestamp default NULL,
+    role VARCHAR(10) NOT NULL
 );

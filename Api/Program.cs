@@ -1,5 +1,7 @@
 using Api;
 using Api.Data.Contracts;
+using Api.Data.Repositories.Contracts;
+using Api.Utils.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,12 @@ builder.ConfigureServices();
 var serviceProvider = builder.Services.BuildServiceProvider();
 var connectionService = serviceProvider.GetRequiredService<IConnectionService>();
 connectionService.GetPostgresConnection().CreateSchemes();
+
+var adminCredentials = new AdminCredentials();
+builder.Configuration.GetSection(nameof(AdminCredentials)).Bind(adminCredentials);
+var socialRepository = serviceProvider.GetRequiredService<ISocialRepository>();
+await socialRepository.TempAdminCredentialsRegisterAsync(adminCredentials);
+
 
 var app = builder.Build();
 

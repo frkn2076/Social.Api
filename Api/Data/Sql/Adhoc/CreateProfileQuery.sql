@@ -6,7 +6,8 @@
 		  , surname
 		  , photo 
 		  , refreshToken
-		  , expireDate )
+		  , expireDate
+		  , role )
 	 VALUES 
 	      ( @userName
 		  , @email
@@ -15,5 +16,6 @@
 		  , @surname
 		  , @photo
 		  , @refreshToken
-		  , @expireDate)
+		  , @expireDate
+		  , @role )
   RETURNING *
