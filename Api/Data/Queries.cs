@@ -28,7 +28,13 @@ public static class Queries
 
     public static string GetProfileByUserNameQuery = nameof(GetProfileByUserNameQuery);
 
+    public static string GetProfileByIdQuery = nameof(GetProfileByIdQuery);
+
     public static string UpdateRefreshTokenQuery = nameof(UpdateRefreshTokenQuery);
+
+    public static string UpdateProfileQuery = nameof(UpdateProfileQuery);
+
+    public static string GetActivityQuery = nameof(GetActivityQuery);
 
     #endregion Queries
 }

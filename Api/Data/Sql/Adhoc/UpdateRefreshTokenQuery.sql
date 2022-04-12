@@ -1,4 +1,5 @@
 ﻿UPDATE public.profile
-   SET refreshToken = @refreshToken
-     , expireDate = @expireDate
+   SET name = @name
+     , surname = @surname
+     , photo = @photo
  WHERE id = @id

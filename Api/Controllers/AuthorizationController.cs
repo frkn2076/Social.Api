@@ -2,14 +2,13 @@ using Api.Infra;
 using Api.Service.Contracts;
 using Api.Utils.Constants;
 using Api.ViewModels.Request;
-using Api.ViewModels.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AuthorizationController : ControllerBase
+public class AuthorizationController : ExtendedControllerBase
 {
     private readonly ILogger<AuthorizationController> _logger;
     private readonly IAuthenticationService _authenticationService;
@@ -30,14 +29,14 @@ public class AuthorizationController : ControllerBase
     public async Task<IActionResult> Register(RegisterRequestModel request)
     {
         var response = await _authenticationService.Register(request.UserName, request.Password);
-        return Ok(response.Response);
+        return HandleServiceResponse(response);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(RegisterRequestModel request)
     {
         var response = await _authenticationService.Login(request.UserName, request.Password);
-        return Ok(response.Response);
+        return HandleServiceResponse(response);
     }
 
     [HttpGet("refresh")]
@@ -50,6 +49,6 @@ public class AuthorizationController : ControllerBase
         }
 
         var response = await _authenticationService.GenerateTokenByRefreshToken(refreshToken);
-        return Ok(response.Response);
+        return HandleServiceResponse(response);
     }
 }

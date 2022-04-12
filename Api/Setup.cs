@@ -25,7 +25,16 @@ public static class Setup
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+
+        services.AddHttpContextAccessor();
         services.RegisterJWTAuthorization();
+
+        services.AddSession(option =>
+        {
+            option.IdleTimeout = TimeSpan.FromMinutes(1);
+        });
+
+        services.AddDistributedMemoryCache();
 
         services.Configure<JWTSettings>(builder.Configuration.GetSection(nameof(JWTSettings)));
 
@@ -36,6 +45,7 @@ public static class Setup
         services.AddTransient<ISocialRepository, SocialRepository>();
 
         services.AddTransient<IAuthenticationService, AuthenticationService>();
+        services.AddTransient<IProfileService, ProfileService>();
 
         services.AddScoped<CurrentUser>();
     }

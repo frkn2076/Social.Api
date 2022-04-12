@@ -38,11 +38,28 @@ public class SocialRepository : ISocialRepository
         return await PostgresConnection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.GetProfileByUserNameQuery), new { userName }, transaction: transaction);
     }
 
+    public async Task<Profile> GetProfileByIdAsync(int id, IDbTransaction transaction = null)
+    {
+        return await PostgresConnection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.GetProfileByIdQuery), new { id }, transaction: transaction);
+    }
+
     public async Task<bool> UpdateRefreshTokenAsync(int id, string refreshToken, DateTime expireDate, IDbTransaction transaction = null)
     {
         var affectedRows = await PostgresConnection.ExecuteAsync(GetQuery(Queries.UpdateRefreshTokenQuery), new { id, refreshToken, expireDate },
             transaction: transaction);
         return affectedRows > 0;
+    }
+
+    public async Task<bool> UpdateProfileAsync(int id, string name, string surname, string photo, IDbTransaction transaction = null)
+    {
+        var affectedRows = await PostgresConnection.ExecuteAsync(GetQuery(Queries.UpdateProfileQuery), new { id, name, surname, photo},
+            transaction: transaction);
+        return affectedRows > 0;
+    }
+
+    public async Task<IEnumerable<Activity>> GetActivityAsync(int count, int skip, IDbTransaction transaction = null)
+    {
+        return await PostgresConnection.QueryAsync<Activity>(GetQuery(Queries.GetActivityQuery), new { count, skip }, transaction: transaction);
     }
 
     #region Helper
