@@ -25,3 +25,16 @@
   | Service               | Method        | Endpoint                  |
   | --------------------- |:-------------:| ------------------------- |
   |                       |               |                           |
+
+<br>
+
+## Databases
+ * PostgreSQL
+
+<br>
+
+## Tools
+ * Dapper
+ * JWT
+ * Swagger
+ * Docker
