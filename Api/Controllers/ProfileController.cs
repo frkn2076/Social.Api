@@ -28,7 +28,7 @@ public class ProfileController : ExtendedControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult Test()
     {
         return Ok($"{nameof(ProfileController)} works properly!");
     }

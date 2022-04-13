@@ -20,7 +20,7 @@ public class AuthorizationController : ExtendedControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult Test()
     {
         return Ok($"{nameof(AuthorizationController)} works properly!");
     }

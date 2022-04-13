@@ -29,21 +29,8 @@ public class AdminController : ExtendedControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Test()
+    public IActionResult Test()
     {
-        //await TempAdminCredentialsRegisterAsync();
         return Ok($"{nameof(AdminController)} works properly!");
     }
-
-    [HttpGet("test")]
-    public async Task<IActionResult> Testtttt()
-    {
-        return Ok("Admin role is working properly!");
-    }
-
-    #region Helper
-
-    
-
-    #endregion Helper
 }

@@ -27,7 +27,7 @@ public class ActivityController : ExtendedControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public IActionResult Test()
     {
         return Ok($"{nameof(ActivityController)} works properly!");
     }
@@ -43,7 +43,7 @@ public class ActivityController : ExtendedControllerBase
 
         HttpContext.Session.SetInt32(SessionItems.ActivitySkipKey, skip);
 
-        return Ok($"{nameof(ActivityController)} works properly!");
+        return Ok();
     }
 
     [HttpGet("private/all")]
@@ -57,8 +57,6 @@ public class ActivityController : ExtendedControllerBase
 
         HttpContext.Session.SetInt32(SessionItems.ActivitySkipKey, skip);
 
-        //HttpContext.Session.CommitAsync();
-
-        return Ok($"{nameof(ActivityController)} works properly!");
+        return Ok();
     }
 }
