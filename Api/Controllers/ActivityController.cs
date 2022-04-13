@@ -29,8 +29,6 @@ public class ActivityController : ExtendedControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var a = _currentUser.GetId();
-        var b = _currentUser.IsAdmin();
         return Ok($"{nameof(ActivityController)} works properly!");
     }
     
