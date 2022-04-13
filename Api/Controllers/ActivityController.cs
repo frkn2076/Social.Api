@@ -1,6 +1,7 @@
 using Api.Data.Contracts;
 using Api.Data.Repositories.Contracts;
 using Api.Infra;
+using Api.Service.Contracts;
 using Api.Utils.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -16,13 +17,13 @@ public class ActivityController : ExtendedControllerBase
     private const int ACTIVITY_PAGINATION_COUNT = 10;
 
     private readonly ILogger<ActivityController> _logger;
-    private readonly ISocialRepository _socialRepository;
+    private readonly IActivityService _activityService;
     private readonly CurrentUser _currentUser;
 
-    public ActivityController(ILogger<ActivityController> logger, ISocialRepository socialRepository, CurrentUser currentUser)
+    public ActivityController(ILogger<ActivityController> logger, IActivityService activityService, CurrentUser currentUser)
     {
         _logger = logger;
-        _socialRepository = socialRepository;
+        _activityService = activityService;
         _currentUser = currentUser;
     }
 
@@ -37,26 +38,22 @@ public class ActivityController : ExtendedControllerBase
     {
         var skip = HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
 
-        var activities = await _socialRepository.GetActivityAsync(ACTIVITY_PAGINATION_COUNT, skip);
+        var response = await _activityService.GetActivitiesAsync(ACTIVITY_PAGINATION_COUNT, skip);
 
         skip += ACTIVITY_PAGINATION_COUNT;
 
         HttpContext.Session.SetInt32(SessionItems.ActivitySkipKey, skip);
 
-        return Ok();
+        return HandleServiceResponse(response);
     }
 
     [HttpGet("private/all")]
     public async Task<IActionResult> GetPrivateActivities()
     {
-        var skip = HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
+        var id = _currentUser.GetId();
 
-        var activities = await _socialRepository.GetActivityAsync(ACTIVITY_PAGINATION_COUNT, skip);
+        var response = await _activityService.GetUserActivitiesAsync(id);
 
-        skip += ACTIVITY_PAGINATION_COUNT;
-
-        HttpContext.Session.SetInt32(SessionItems.ActivitySkipKey, skip);
-
-        return Ok();
+        return HandleServiceResponse(response);
     }
 }

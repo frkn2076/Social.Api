@@ -11,4 +11,6 @@ public static class ErrorMessages
     public const string OperationHasFailed = "Operation has failed";
 
     public const string UserAlreadyExists = "User already exists";
+
+    public const string NoRecordHasFound = "No record has found";
 }

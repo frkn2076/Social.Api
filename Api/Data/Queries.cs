@@ -36,5 +36,7 @@ public static class Queries
 
     public static string GetActivityQuery = nameof(GetActivityQuery);
 
+    public static string GetUserActivityQuery = nameof(GetUserActivityQuery);
+
     #endregion Queries
 }

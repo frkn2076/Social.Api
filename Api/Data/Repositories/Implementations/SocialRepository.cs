@@ -61,6 +61,11 @@ public class SocialRepository : ISocialRepository
     {
         return await PostgresConnection.QueryAsync<Activity>(GetQuery(Queries.GetActivityQuery), new { count, skip }, transaction: transaction);
     }
+    
+    public async Task<IEnumerable<Activity>> GetUserActivityAsync(int id, IDbTransaction transaction = null)
+    {
+        return await PostgresConnection.QueryAsync<Activity>(GetQuery(Queries.GetUserActivityQuery), new { id }, transaction: transaction);
+    }
 
     #region Helper
 
