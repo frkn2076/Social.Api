@@ -12,14 +12,13 @@ using Api.Utils.Models;
 using Dapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using System.Text;
 
 namespace Api;
 
 public static class Setup
 {
-    public static void ConfigureServices(this WebApplicationBuilder builder)
+    public static async void ConfigureServices(this WebApplicationBuilder builder)
     {
         var services = builder.Services;
 
@@ -51,10 +50,24 @@ public static class Setup
         var jwtSettings = new JWTSettings();
         builder.Configuration.GetSection(nameof(JWTSettings)).Bind(jwtSettings);
         services.RegisterJWTAuthorization(jwtSettings);
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        await serviceProvider.CreateSchemesAsync();
+
+        var adminCredentials = new AdminCredentials();
+        builder.Configuration.GetSection(nameof(AdminCredentials)).Bind(adminCredentials);
+        await serviceProvider.TempAdminCredentialsRegisterAsync(adminCredentials);
     }
 
-    public static async void CreateSchemes(this IDbConnection dbConnection)
+    #region Helper
+
+    private static async Task CreateSchemesAsync(this ServiceProvider serviceProvider)
     {
+        
+        var connectionService = serviceProvider.GetRequiredService<IConnectionService>();
+        var dbConnection = connectionService.GetPostgresConnection();
+
         var currentDirectory = Directory.GetCurrentDirectory();
         var folderPath = Path.Combine(currentDirectory, Queries.SchemeFolderPath);
         var schemeQueryFileNames = Directory.GetFiles(folderPath);
@@ -68,8 +81,10 @@ public static class Setup
         transaction.Commit();
     }
 
-    public static async Task TempAdminCredentialsRegisterAsync(this ISocialRepository socialRepository, AdminCredentials adminCredentials)
+    private static async Task TempAdminCredentialsRegisterAsync(this ServiceProvider serviceProvider, AdminCredentials adminCredentials)
     {
+        var socialRepository = serviceProvider.GetRequiredService<ISocialRepository>();
+
         var admin = new Profile()
         {
             UserName = adminCredentials.UserName,
@@ -77,10 +92,15 @@ public static class Setup
             Role = Roles.Admin
         };
 
+        var profile = await socialRepository.GetProfileByUserNameAsync(adminCredentials.UserName);
+
+        if (profile != null)
+        {
+            return;
+        }
+
         await socialRepository.CreateProfileAsync(admin);
     }
-
-    #region Helper
 
     private static void RegisterJWTAuthorization(this IServiceCollection services, JWTSettings settings)
     {
@@ -100,13 +120,6 @@ public static class Setup
                 ValidateAudience = false
             };
         });
-    }
-
-    private static T GetOptions<T>(this WebApplicationBuilder builder) where T : new()
-    {
-        var t = new T();
-        builder.Configuration.GetSection(nameof(T)).Bind(t);
-        return t;
     }
 
     #endregion Helper
