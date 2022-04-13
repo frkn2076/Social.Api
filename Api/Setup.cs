@@ -5,6 +5,7 @@ using Api.Data.Implementations;
 using Api.Data.Repositories.Contracts;
 using Api.Data.Repositories.Implementations;
 using Api.Enums;
+using Api.Extensions;
 using Api.Service.Contracts;
 using Api.Service.Implementations;
 using Api.Utils;
@@ -47,16 +48,14 @@ public static class Setup
 
         services.AddScoped<CurrentUser>();
 
-        var jwtSettings = new JWTSettings();
-        builder.Configuration.GetSection(nameof(JWTSettings)).Bind(jwtSettings);
+        var jwtSettings = builder.Configuration.GetOptions<JWTSettings>();
         services.RegisterJWTAuthorization(jwtSettings);
 
         var serviceProvider = services.BuildServiceProvider();
 
         await serviceProvider.CreateSchemesAsync();
 
-        var adminCredentials = new AdminCredentials();
-        builder.Configuration.GetSection(nameof(AdminCredentials)).Bind(adminCredentials);
+        var adminCredentials = builder.Configuration.GetOptions<AdminCredentials>();
         await serviceProvider.TempAdminCredentialsRegisterAsync(adminCredentials);
     }
 
