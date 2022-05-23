@@ -22,4 +22,8 @@ public interface ISocialRepository
     Task<IEnumerable<Activity>> GetActivityAsync(int count, int skip, IDbTransaction transaction = null);
 
     Task<IEnumerable<Activity>> GetUserActivityAsync(int id, IDbTransaction transaction = null);
+
+    Task<Activity> GetActivityByIdAsync(int activityId, IDbTransaction transaction = null);
+
+    Task<IEnumerable<Profile>> GetUsersByActivityIdQueryAsync(int activityId, IDbTransaction transaction = null);
 }

@@ -50,9 +50,17 @@ public class ActivityController : ExtendedControllerBase
     [HttpGet("private/all")]
     public async Task<IActionResult> GetPrivateActivities()
     {
-        var id = _currentUser.GetId();
+        var userId = _currentUser.GetId();
 
-        var response = await _activityService.GetUserActivitiesAsync(id);
+        var response = await _activityService.GetUserActivitiesAsync(userId);
+
+        return HandleServiceResponse(response);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetActivityDetail(int id)
+    {
+        var response = await _activityService.GetActivityDetail(id);
 
         return HandleServiceResponse(response);
     }

@@ -38,5 +38,9 @@ public static class Queries
 
     public static string GetUserActivityQuery = nameof(GetUserActivityQuery);
 
+    public static string GetActivityById = nameof(GetActivityById);
+
+    public static string GetUsersByActivityIdQuery = nameof(GetUsersByActivityIdQuery);
+
     #endregion Queries
 }

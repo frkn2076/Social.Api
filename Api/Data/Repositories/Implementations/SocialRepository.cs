@@ -1,7 +1,6 @@
 ﻿using Api.Data.Contracts;
 using Api.Data.Entities;
 using Api.Data.Repositories.Contracts;
-using Api.Utils;
 using Dapper;
 using System.Data;
 
@@ -67,6 +66,16 @@ public class SocialRepository : ISocialRepository
         return await PostgresConnection.QueryAsync<Activity>(GetQuery(Queries.GetUserActivityQuery), new { id }, transaction: transaction);
     }
 
+    public async Task<Activity> GetActivityByIdAsync(int activityId, IDbTransaction transaction = null)
+    {
+        return await PostgresConnection.QueryFirstOrDefaultAsync<Activity>(GetQuery(Queries.GetActivityQuery), new { activityId }, transaction: transaction);
+    }
+
+    public async Task<IEnumerable<Profile>> GetUsersByActivityIdQueryAsync(int activityId, IDbTransaction transaction = null)
+    {
+        return await PostgresConnection.QueryAsync<Profile>(GetQuery(Queries.GetUsersByActivityIdQuery), new { activityId }, transaction: transaction);
+    }
+
     #region Helper
 
     private string GetQuery(string queryFileName)
@@ -74,7 +83,8 @@ public class SocialRepository : ISocialRepository
         var currentDirectory = Directory.GetCurrentDirectory();
         var path = Path.Combine(currentDirectory, Queries.AdhocFolderPath);
         var file = string.Concat(queryFileName, Queries.SqlFileExtension);
-        return FileResourceUtility.LoadResource(path, file);
+        var filePath = Path.Combine(path, file);
+        return File.ReadAllText(filePath);
     }
 
     #endregion Helper
