@@ -1,11 +1,7 @@
-using Api.Data.Contracts;
-using Api.Data.Entities;
 using Api.Data.Repositories.Contracts;
 using Api.Enums;
 using Api.Infra;
-using Api.Utils.Constants;
 using Api.Utils.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

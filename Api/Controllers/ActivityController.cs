@@ -1,5 +1,3 @@
-using Api.Data.Contracts;
-using Api.Data.Repositories.Contracts;
 using Api.Infra;
 using Api.Service.Contracts;
 using Api.Utils.Constants;

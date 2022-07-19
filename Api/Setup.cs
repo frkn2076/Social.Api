@@ -1,7 +1,5 @@
 ﻿using Api.Data;
-using Api.Data.Contracts;
 using Api.Data.Entities;
-using Api.Data.Implementations;
 using Api.Data.Repositories.Contracts;
 using Api.Data.Repositories.Implementations;
 using Api.Enums;
@@ -13,6 +11,7 @@ using Api.Utils.Models;
 using Dapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using System.Text;
 
 namespace Api;
@@ -40,7 +39,6 @@ public static class Setup
         services.Configure<JWTSettings>(builder.Configuration.GetSection(nameof(JWTSettings)));
         services.Configure<AdminCredentials>(builder.Configuration.GetSection(nameof(AdminCredentials)));
 
-        services.AddTransient<IConnectionService, ConnectionService>();
         services.AddTransient<ISocialRepository, SocialRepository>();
 
         services.AddTransient<IAuthenticationService, AuthenticationService>();
@@ -51,33 +49,43 @@ public static class Setup
         var jwtSettings = builder.Configuration.GetOptions<JWTSettings>();
         services.RegisterJWTAuthorization(jwtSettings);
 
+        services.AddCors();
+
         var serviceProvider = services.BuildServiceProvider();
 
-        await serviceProvider.CreateSchemesAsync();
+        #region Create DB Schemes
+
+        var postgresConnectionString = builder.Configuration.GetConnectionString("PostgresContext");
+        await CreateSchemesAsync(postgresConnectionString);
 
         var adminCredentials = builder.Configuration.GetOptions<AdminCredentials>();
         await serviceProvider.TempAdminCredentialsRegisterAsync(adminCredentials);
+
+        #endregion
     }
 
     #region Helper
 
-    private static async Task CreateSchemesAsync(this ServiceProvider serviceProvider)
+    private static async Task CreateSchemesAsync(string postgresConnectionString)
     {
-        
-        var connectionService = serviceProvider.GetRequiredService<IConnectionService>();
-        var dbConnection = connectionService.GetPostgresConnection();
-
         var currentDirectory = Directory.GetCurrentDirectory();
         var folderPath = Path.Combine(currentDirectory, Queries.SchemeFolderPath);
         var schemeQueryFileNames = Directory.GetFiles(folderPath);
 
-        using var transaction = dbConnection.BeginTransaction();
-        foreach (var schemeQueryFileName in schemeQueryFileNames)
+        using (var connection = new NpgsqlConnection(postgresConnectionString))
         {
-            var schemeQuery = FileResourceUtility.LoadResource(folderPath, schemeQueryFileName);
-            await dbConnection.ExecuteAsync(schemeQuery, transaction: transaction);
+            connection.Open();
+
+            using (var transaction = connection.BeginTransaction())
+            {
+                foreach (var schemeQueryFileName in schemeQueryFileNames)
+                {
+                    var schemeQuery = FileResourceUtility.LoadResource(folderPath, schemeQueryFileName);
+                    await connection.ExecuteAsync(schemeQuery, transaction: transaction);
+                }
+                transaction.Commit();
+            }
         }
-        transaction.Commit();
     }
 
     private static async Task TempAdminCredentialsRegisterAsync(this ServiceProvider serviceProvider, AdminCredentials adminCredentials)
@@ -104,11 +112,13 @@ public static class Setup
     private static void RegisterJWTAuthorization(this IServiceCollection services, JWTSettings settings)
     {
         var key = Encoding.ASCII.GetBytes(settings.SecretKey);
-        services.AddAuthentication(x => {
+        services.AddAuthentication(x =>
+        {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddJwtBearer(x => {
+        .AddJwtBearer(x =>
+        {
             x.RequireHttpsMetadata = false;
             x.SaveToken = true;
             x.TokenValidationParameters = new TokenValidationParameters
