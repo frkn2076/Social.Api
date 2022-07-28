@@ -1,35 +1,23 @@
 ﻿version: '3.4'
 
 services:    
-  socialapi:
-    image: 'socialapi'
-    container_name: 'socialapi-container'
+  api:
+    restart: always
     build: Api/.
     ports:
       - '8080:80'
     depends_on:
-      - socialdb
-    networks:
-      - social-network
+      - db
       
-  socialdb:
-    image: 'postgres:13-alpine'
-    container_name: 'socialdb-container'
-    environment:
-      - POSTGRES_DB='socialdb'
-      - POSTGRES_USER='postgres'
-      - POSTGRES_PASSWORD=''postgres'
-    ports:
-      - '5432:5432'
-    volumes:
-      - social-volume:/var/lib/postgresql/data
-    restart: always
-    networks:
-      - social-network
+  db:
+   image: postgres
+   restart: always
+   environment:
+     POSTGRES_PASSWORD: example
+     POSTGRES_DB: my_db
+   volumes:
+      - volume:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
-  social-volume:
-
-networks:
-  social-network:
-    driver: bridge
+  volume:

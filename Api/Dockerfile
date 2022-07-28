@@ -1,5 +1,3 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -10,6 +8,7 @@ WORKDIR /src
 COPY ["Api.csproj", "."]
 RUN dotnet restore "Api.csproj"
 COPY . .
+COPY Data/Sql/ ./Data/Sql/
 WORKDIR "/src"
 RUN dotnet build "Api.csproj" -c Release -o /app/build
 
