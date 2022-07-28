@@ -20,7 +20,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.CreateProfileQuery), profile, transaction: transaction);
+            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Constants.Queries.CreateProfileQuery), profile, transaction: transaction);
         }
     }
 
@@ -29,7 +29,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryFirstAsync<string>(GetQuery(Queries.GetPasswordQuery), new { email }, transaction: transaction);
+            return await connection.QueryFirstAsync<string>(GetQuery(Constants.Queries.GetPasswordQuery), new { email }, transaction: transaction);
         }
     }
 
@@ -38,7 +38,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.GetProfileByRefreshTokenQuery), new { refreshToken }, transaction: transaction);
+            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Constants.Queries.GetProfileByRefreshTokenQuery), new { refreshToken }, transaction: transaction);
         }
     }
 
@@ -47,7 +47,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.GetProfileByUserNameQuery), new { userName }, transaction: transaction);
+            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Constants.Queries.GetProfileByUserNameQuery), new { userName }, transaction: transaction);
         }
     }
 
@@ -56,7 +56,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Queries.GetProfileByIdQuery), new { id }, transaction: transaction);
+            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Constants.Queries.GetProfileByIdQuery), new { id }, transaction: transaction);
         }
     }
 
@@ -65,7 +65,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            var affectedRows = await connection.ExecuteAsync(GetQuery(Queries.UpdateRefreshTokenQuery), new { id, refreshToken, expireDate },
+            var affectedRows = await connection.ExecuteAsync(GetQuery(Constants.Queries.UpdateRefreshTokenQuery), new { id, refreshToken, expireDate },
                 transaction: transaction);
             return affectedRows > 0;
         }
@@ -77,7 +77,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            var affectedRows = await connection.ExecuteAsync(GetQuery(Queries.UpdateProfileQuery), new { id, name, surname, photo },
+            var affectedRows = await connection.ExecuteAsync(GetQuery(Constants.Queries.UpdateProfileQuery), new { id, name, surname, photo },
                 transaction: transaction);
             return affectedRows > 0;
         }
@@ -88,7 +88,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryAsync<Activity>(GetQuery(Queries.GetActivityQuery), new { count, skip }, transaction: transaction);
+            return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetActivityQuery), new { count, skip }, transaction: transaction);
         }
     }
     
@@ -97,7 +97,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryAsync<Activity>(GetQuery(Queries.GetUserActivityQuery), new { id }, transaction: transaction);
+            return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetUserActivityQuery), new { id }, transaction: transaction);
         }
     }
 
@@ -106,7 +106,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryFirstOrDefaultAsync<Activity>(GetQuery(Queries.GetActivityQuery), new { activityId }, transaction: transaction);
+            return await connection.QueryFirstOrDefaultAsync<Activity>(GetQuery(Constants.Queries.GetActivityQuery), new { activityId }, transaction: transaction);
         }
     }
 
@@ -115,7 +115,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryAsync<Profile>(GetQuery(Queries.GetUsersByActivityIdQuery), new { activityId }, transaction: transaction);
+            return await connection.QueryAsync<Profile>(GetQuery(Constants.Queries.GetUsersByActivityIdQuery), new { activityId }, transaction: transaction);
         }
     }
 
@@ -124,8 +124,8 @@ public class SocialRepository : ISocialRepository
     private string GetQuery(string queryFileName)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
-        var path = Path.Combine(currentDirectory, Queries.AdhocFolderPath);
-        var file = string.Concat(queryFileName, Queries.SqlFileExtension);
+        var path = Path.Combine(currentDirectory, Constants.AdhocFolderPath);
+        var file = string.Concat(queryFileName, Constants.SqlFileExtension);
         var filePath = Path.Combine(path, file);
         return File.ReadAllText(filePath);
     }

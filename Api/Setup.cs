@@ -69,9 +69,9 @@ public static class Setup
     private static async Task CreateSchemesAsync(string postgresConnectionString)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
-        var folderPath = Path.Combine(currentDirectory, Queries.SchemeFolderPath);
+        var folderPath = Path.Combine(currentDirectory, Constants.SchemeFolderPath);
         var schemeQueryFileNames = Directory.GetFiles(folderPath);
-
+        
         using (var connection = new NpgsqlConnection(postgresConnectionString))
         {
             connection.Open();
