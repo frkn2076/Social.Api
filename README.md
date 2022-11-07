@@ -38,3 +38,6 @@
  * JWT
  * Swagger
  * Docker
+
+## Docker command to run postgres locally:
+ docker run -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=example -e POSTGRES_DB=my_db -d postgres:13-alpine
