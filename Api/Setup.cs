@@ -41,6 +41,7 @@ public static class Setup
 
         services.AddTransient<ISocialRepository, SocialRepository>();
 
+        services.AddTransient<IActivityService, ActivityService>();
         services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<IProfileService, ProfileService>();
 
