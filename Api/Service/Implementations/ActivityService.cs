@@ -16,11 +16,11 @@ public class ActivityService : IActivityService
         _socialRepository = socialRepository;
     }
 
-    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesAsync(int skip, int count)
+    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesAsync(int count, int skip)
     {
         var activities = await _socialRepository.GetActivityAsync(count, skip);
 
-        if(activities == null || !activities.Any())
+        if(!activities?.Any() ?? true)
         {
             return new()
             {

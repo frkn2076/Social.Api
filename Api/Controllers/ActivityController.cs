@@ -34,7 +34,7 @@ public class ActivityController : ExtendedControllerBase
     [HttpGet("all/{isRefresh?}")]
     public async Task<IActionResult> GetActivities(bool isRefresh)
     {
-        var skip = HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
+        var skip = isRefresh ? 0 : HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
 
         var response = await _activityService.GetActivitiesAsync(ACTIVITY_PAGINATION_COUNT, skip);
 
