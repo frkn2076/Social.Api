@@ -1,4 +1,3 @@
 ﻿SELECT *
   FROM public.activity
- LIMIT @count
-OFFSET @skip
+ WHERE id = @activityId

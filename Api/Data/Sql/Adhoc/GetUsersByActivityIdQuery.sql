@@ -1,5 +1,5 @@
 ﻿SELECT *
   FROM public.profile
- WHERE profileid = ANY ( SELECT profileid
+ WHERE id = ANY ( SELECT profileid
 						  FROM public.profile_activity
-						  WHERE activityId = @activityId )
+						  WHERE activityId = 1 )

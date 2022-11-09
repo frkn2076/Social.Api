@@ -106,7 +106,7 @@ public class SocialRepository : ISocialRepository
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryFirstOrDefaultAsync<Activity>(GetQuery(Constants.Queries.GetActivityQuery), new { activityId }, transaction: transaction);
+            return await connection.QueryFirstOrDefaultAsync<Activity>(GetQuery(Constants.Queries.GetActivityByIdQuery), new { activityId }, transaction: transaction);
         }
     }
 
