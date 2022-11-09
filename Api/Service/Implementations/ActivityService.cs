@@ -90,4 +90,27 @@ public class ActivityService : IActivityService
             Response = response
         };
     }
+
+    public async Task<ServiceResponse<bool>> JoinActivityAsync(int profileId, int activityId)
+    {
+        try
+        {
+            await _socialRepository.CreateProfileActivityAsync(activityId, profileId);
+            return new()
+            {
+                IsSuccessful = true,
+                Response = true
+            };
+        }
+        catch (Exception ex)
+        {
+            // log ex
+            return new()
+            {
+                Error = ErrorMessages.NoRecordHasFound
+            };
+        }
+
+        
+    }
 }

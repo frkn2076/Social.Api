@@ -21,6 +21,8 @@ public static class Constants
     {
         public static string CreateProfileQuery = nameof(CreateProfileQuery);
 
+        public static string CreateProfileActivityQuery = nameof(CreateProfileActivityQuery);
+
         public static string GetPasswordQuery = nameof(GetPasswordQuery);
 
         public static string GetProfileByRefreshTokenQuery = nameof(GetProfileByRefreshTokenQuery);

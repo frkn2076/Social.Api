@@ -52,7 +52,7 @@ public class ProfileController : ExtendedControllerBase
     public async Task<IActionResult> UpdatePrivate(ProfileDetailRequestModel request)
     {
         var id = _currentUser.GetId();
-        var response = await _profileService.UpdateProfileAsync(id, request.Name, request.Surname, request.Photo);
+        var response = await _profileService.UpdateProfileAsync(id, request.Name, request.Surname, request.Photo, request.About);
         return HandleServiceResponse(response);
     }
 }

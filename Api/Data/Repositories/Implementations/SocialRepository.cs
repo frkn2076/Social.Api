@@ -24,6 +24,16 @@ public class SocialRepository : ISocialRepository
         }
     }
 
+    public async Task CreateProfileActivityAsync(int activityId, int profileId, IDbTransaction transaction = null)
+    {
+        using (var connection = new NpgsqlConnection(_connectionString))
+        {
+            connection.Open();
+            await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Constants.Queries.CreateProfileActivityQuery), new { profileId, activityId },
+                transaction: transaction);
+        }
+    }
+
     public async Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))
@@ -69,15 +79,15 @@ public class SocialRepository : ISocialRepository
                 transaction: transaction);
             return affectedRows > 0;
         }
-        
+
     }
 
-    public async Task<bool> UpdateProfileAsync(int id, string name, string surname, string photo, IDbTransaction transaction = null)
+    public async Task<bool> UpdateProfileAsync(int id, string name, string surname, string photo, string about, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            var affectedRows = await connection.ExecuteAsync(GetQuery(Constants.Queries.UpdateProfileQuery), new { id, name, surname, photo },
+            var affectedRows = await connection.ExecuteAsync(GetQuery(Constants.Queries.UpdateProfileQuery), new { id, name, surname, photo, about },
                 transaction: transaction);
             return affectedRows > 0;
         }
@@ -91,7 +101,7 @@ public class SocialRepository : ISocialRepository
             return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetActivityQuery), new { count, skip }, transaction: transaction);
         }
     }
-    
+
     public async Task<IEnumerable<Activity>> GetUserActivityAsync(int id, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))

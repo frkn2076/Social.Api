@@ -16,11 +16,13 @@ public class Profile
 
     public string Name { get; set; }
 
-    public string Surname { get; set; }
+    public string About { get; set; }
 
-    public string RefreshToken { get; set; }
+    public string Surname { get; set; } //remove
 
-    public DateTime ExpireDate { get; set; }
+    public string RefreshToken { get; set; } //remove
+
+    public DateTime ExpireDate { get; set; } //remove
 
     public string Role { get; set; } = Roles.User;
 }

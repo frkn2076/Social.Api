@@ -2,4 +2,4 @@
   FROM public.profile
  WHERE id = ANY ( SELECT profileid
 						  FROM public.profile_activity
-						  WHERE activityId = 1 )
+						  WHERE activityId = @activityId )

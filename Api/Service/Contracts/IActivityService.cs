@@ -11,4 +11,6 @@ public interface IActivityService
     Task<ServiceResponse<IEnumerable<Activity>>> GetUserActivitiesAsync(int userId);
 
     Task<ServiceResponse<ActivityDetailResponseModel>> GetActivityDetail(int activityId);
+
+    public Task<ServiceResponse<bool>> JoinActivityAsync(int profileId, int activityId);
 }

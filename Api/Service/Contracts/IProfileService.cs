@@ -7,5 +7,5 @@ public interface IProfileService
 {
     Task<ServiceResponse<Profile>> GetProfileAsync(int id);
 
-    Task<ServiceResponse<bool>> UpdateProfileAsync(int id, string name, string surname, string photo);
+    Task<ServiceResponse<bool>> UpdateProfileAsync(int id, string name, string surname, string photo, string about);
 }

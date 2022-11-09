@@ -7,6 +7,8 @@ public interface ISocialRepository
 {
     Task<Profile> CreateProfileAsync(Profile profile, IDbTransaction transaction = null);
 
+    public Task CreateProfileActivityAsync(int activityId, int profileId, IDbTransaction transaction = null);
+
     Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null);
 
     Task<Profile> GetProfileByRefreshTokenAsync(string refreshToken, IDbTransaction transaction = null);
@@ -17,7 +19,7 @@ public interface ISocialRepository
 
     Task<Profile> GetProfileByIdAsync(int id, IDbTransaction transaction = null);
 
-    Task<bool> UpdateProfileAsync(int id, string name, string surname, string photo, IDbTransaction transaction = null);
+    Task<bool> UpdateProfileAsync(int id, string name, string surname, string photo, string about, IDbTransaction transaction = null);
 
     Task<IEnumerable<Activity>> GetActivityAsync(int count, int skip, IDbTransaction transaction = null);
 

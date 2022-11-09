@@ -1,6 +1,7 @@
 using Api.Infra;
 using Api.Service.Contracts;
 using Api.Utils.Constants;
+using Api.ViewModels.Request;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,16 @@ public class ActivityController : ExtendedControllerBase
     public async Task<IActionResult> GetActivityDetail(int id)
     {
         var response = await _activityService.GetActivityDetail(id);
+
+        return HandleServiceResponse(response);
+    }
+
+    [HttpPost("join")]
+    public async Task<IActionResult> JoinActivity(JoinActivityRequestModel request)
+    {
+        var userId = _currentUser.GetId();
+
+        var response = await _activityService.JoinActivityAsync(userId, request.ActivityId);
 
         return HandleServiceResponse(response);
     }

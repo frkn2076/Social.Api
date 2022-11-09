@@ -34,9 +34,9 @@ public class ProfileService : IProfileService
         };
     }
 
-    public async Task<ServiceResponse<bool>> UpdateProfileAsync(int id, string name, string surname, string photo)
+    public async Task<ServiceResponse<bool>> UpdateProfileAsync(int id, string name, string surname, string photo, string about)
     {
-        var isSucceed = await _socialRepository.UpdateProfileAsync(id, name, surname, photo);
+        var isSucceed = await _socialRepository.UpdateProfileAsync(id, name, surname, photo, about);
 
         if (!isSucceed)
         {
@@ -48,7 +48,8 @@ public class ProfileService : IProfileService
 
         return new()
         {
-            IsSuccessful = true
+            IsSuccessful = true,
+            Response = true
         };
     }
 }

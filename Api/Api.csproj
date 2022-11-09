@@ -18,6 +18,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Data\Sql\Adhoc\CreateProfileActivityQuery.sql">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Data\Sql\Adhoc\CreateProfileQuery.sql">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
