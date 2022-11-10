@@ -54,7 +54,7 @@ public class ActivityService : IActivityService
         };
     }
 
-    public async Task<ServiceResponse<ActivityDetailResponseModel>> GetActivityDetail(int activityId)
+    public async Task<ServiceResponse<ActivityDetailResponseModel>> GetActivityDetail(int activityId, int userId)
     {
         var activity = await _socialRepository.GetActivityByIdAsync(activityId);
 
@@ -74,6 +74,7 @@ public class ActivityService : IActivityService
         {
             Id = activityId,
             Date = activity.Date,
+            UserId = userId,
             Detail = activity.Detail,
             Location = activity.Location,
             Title = activity.Title,

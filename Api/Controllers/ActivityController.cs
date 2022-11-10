@@ -59,7 +59,9 @@ public class ActivityController : ExtendedControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetActivityDetail(int id)
     {
-        var response = await _activityService.GetActivityDetail(id);
+        var userId = _currentUser.GetId();
+
+        var response = await _activityService.GetActivityDetail(id, userId);
 
         return HandleServiceResponse(response);
     }

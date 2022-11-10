@@ -12,5 +12,7 @@ public class ActivityDetailResponseModel
 
     public DateTime Date { get; set; }
 
+    public int UserId { get; set; }
+
     public List<UserResponseModel> Joiners { get; set; }
 }
