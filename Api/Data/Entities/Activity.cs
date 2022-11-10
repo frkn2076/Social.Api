@@ -10,5 +10,9 @@ public class Activity
 
     public string Location { get; set; }
     
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
+
+    public string PhoneNumber { get; set; }
+
+    public int OwnerProfileId { get; set; }
 }

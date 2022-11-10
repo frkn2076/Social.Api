@@ -7,6 +7,8 @@ public interface ISocialRepository
 {
     Task<Profile> CreateProfileAsync(Profile profile, IDbTransaction transaction = null);
 
+    public Task<Activity> CreateActivityAsync(Activity activity, IDbTransaction transaction = null);
+
     public Task CreateProfileActivityAsync(int activityId, int profileId, IDbTransaction transaction = null);
 
     Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null);

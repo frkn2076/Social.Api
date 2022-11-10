@@ -108,10 +108,38 @@ public class ActivityService : IActivityService
             // log ex
             return new()
             {
-                Error = ErrorMessages.NoRecordHasFound
+                Error = ErrorMessages.OperationHasFailed
             };
         }
+    }
 
-        
+    public async Task<ServiceResponse<bool>> CreateActivityAsync(string title, string detail, string location, DateTime? date, string phoneNumber, int userId)
+    {
+        try
+        {
+            var activity = new Activity()
+            {
+                Title = title,
+                Detail = detail,
+                Location = location,
+                Date = date,
+                PhoneNumber = phoneNumber,
+                OwnerProfileId = userId
+            };
+            await _socialRepository.CreateActivityAsync(activity);
+            return new()
+            {
+                IsSuccessful = true,
+                Response = true
+            };
+        }
+        catch (Exception ex)
+        {
+            // log ex
+            return new()
+            {
+                Error = ErrorMessages.OperationHasFailed
+            };
+        }
     }
 }

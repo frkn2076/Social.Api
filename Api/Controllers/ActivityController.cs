@@ -31,7 +31,7 @@ public class ActivityController : ExtendedControllerBase
     {
         return Ok($"{nameof(ActivityController)} works properly!");
     }
-    
+
     [HttpGet("all/{isRefresh?}")]
     public async Task<IActionResult> GetActivities(bool isRefresh)
     {
@@ -72,6 +72,16 @@ public class ActivityController : ExtendedControllerBase
         var userId = _currentUser.GetId();
 
         var response = await _activityService.JoinActivityAsync(userId, request.ActivityId);
+
+        return HandleServiceResponse(response);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateActivity(CreateActivityRequestModel request)
+    {
+        var userId = _currentUser.GetId();
+
+        var response = await _activityService.CreateActivityAsync(request.Title, request.Detail, request.Location, request.Date, request.PhoneNumber, userId);
 
         return HandleServiceResponse(response);
     }

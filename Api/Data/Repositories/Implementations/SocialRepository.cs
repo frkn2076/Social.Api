@@ -24,6 +24,15 @@ public class SocialRepository : ISocialRepository
         }
     }
 
+    public async Task<Activity> CreateActivityAsync(Activity activity, IDbTransaction transaction = null)
+    {
+        using (var connection = new NpgsqlConnection(_connectionString))
+        {
+            connection.Open();
+            return await connection.QueryFirstOrDefaultAsync<Activity>(GetQuery(Constants.Queries.CreateActivityQuery), activity, transaction: transaction);
+        }
+    }
+
     public async Task CreateProfileActivityAsync(int activityId, int profileId, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))
