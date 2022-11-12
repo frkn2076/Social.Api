@@ -41,6 +41,8 @@ public static class Constants
 
         public static string GetUserActivityQuery = nameof(GetUserActivityQuery);
 
+        public static string GetOwnerActivityQuery = nameof(GetOwnerActivityQuery);
+
         public static string GetActivityByIdQuery = nameof(GetActivityByIdQuery);
 
         public static string GetUsersByActivityIdQuery = nameof(GetUsersByActivityIdQuery);

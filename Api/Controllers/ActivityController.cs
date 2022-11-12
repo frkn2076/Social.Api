@@ -56,6 +56,14 @@ public class ActivityController : ExtendedControllerBase
         return HandleServiceResponse(response);
     }
 
+    [HttpGet("owner/{id}")]
+    public async Task<IActionResult> GetOwnerActivities(int id)
+    {
+        var response = await _activityService.GetOwnerActivitiesAsync(id);
+
+        return HandleServiceResponse(response);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetActivityDetail(int id)
     {

@@ -120,6 +120,15 @@ public class SocialRepository : ISocialRepository
         }
     }
 
+    public async Task<IEnumerable<Activity>> GetOwnerActivityAsync(int id, IDbTransaction transaction = null)
+    {
+        using (var connection = new NpgsqlConnection(_connectionString))
+        {
+            connection.Open();
+            return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetOwnerActivityQuery), new { id }, transaction: transaction);
+        }
+    }
+
     public async Task<Activity> GetActivityByIdAsync(int activityId, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))

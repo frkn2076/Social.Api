@@ -54,6 +54,25 @@ public class ActivityService : IActivityService
         };
     }
 
+    public async Task<ServiceResponse<IEnumerable<Activity>>> GetOwnerActivitiesAsync(int userId)
+    {
+        var activities = await _socialRepository.GetOwnerActivityAsync(userId);
+
+        if (activities == null || !activities.Any())
+        {
+            return new()
+            {
+                Error = ErrorMessages.NoRecordHasFound
+            };
+        }
+
+        return new()
+        {
+            IsSuccessful = true,
+            Response = activities
+        };
+    }
+
     public async Task<ServiceResponse<ActivityDetailResponseModel>> GetActivityDetail(int activityId, int userId)
     {
         var activity = await _socialRepository.GetActivityByIdAsync(activityId);
