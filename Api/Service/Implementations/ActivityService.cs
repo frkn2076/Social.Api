@@ -20,7 +20,7 @@ public class ActivityService : IActivityService
     {
         var activities = await _socialRepository.GetActivityAsync(count, skip);
 
-        if(!activities?.Any() ?? true)
+        if (!activities?.Any() ?? true)
         {
             return new()
             {
@@ -97,6 +97,7 @@ public class ActivityService : IActivityService
             Detail = activity.Detail,
             Location = activity.Location,
             Title = activity.Title,
+            PhoneNumber = activity.PhoneNumber,
             Joiners = joiners.Select(x => new UserResponseModel()
             {
                 Id = x.Id,
@@ -145,7 +146,18 @@ public class ActivityService : IActivityService
                 PhoneNumber = phoneNumber,
                 OwnerProfileId = userId
             };
-            await _socialRepository.CreateActivityAsync(activity);
+            var createdActivity = await _socialRepository.CreateActivityAsync(activity);
+
+            if (createdActivity.Id <= 0)
+            {
+                return new()
+                {
+                    Error = ErrorMessages.OperationHasFailed
+                };
+            }
+
+            await _socialRepository.CreateProfileActivityAsync(createdActivity.Id, userId);
+
             return new()
             {
                 IsSuccessful = true,

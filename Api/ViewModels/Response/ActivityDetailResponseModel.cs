@@ -14,5 +14,7 @@ public class ActivityDetailResponseModel
 
     public int UserId { get; set; }
 
+    public string PhoneNumber { get; set; }
+
     public List<UserResponseModel> Joiners { get; set; }
 }
