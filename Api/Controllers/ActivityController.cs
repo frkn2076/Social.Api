@@ -13,7 +13,7 @@ namespace Api.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ActivityController : ExtendedControllerBase
 {
-    private const int ACTIVITY_PAGINATION_COUNT = 10;
+    private const int ACTIVITY_PAGINATION_COUNT = 50; // will be 20 or 25
 
     private readonly ILogger<ActivityController> _logger;
     private readonly IActivityService _activityService;
@@ -51,6 +51,14 @@ public class ActivityController : ExtendedControllerBase
     {
         var userId = _currentUser.GetId();
 
+        var response = await _activityService.GetUserActivitiesAsync(userId);
+
+        return HandleServiceResponse(response);
+    }
+
+    [HttpGet("joined/{userid}")]
+    public async Task<IActionResult> GetJoinedActivities(int userId)
+    {
         var response = await _activityService.GetUserActivitiesAsync(userId);
 
         return HandleServiceResponse(response);
