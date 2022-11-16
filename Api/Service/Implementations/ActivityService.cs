@@ -148,7 +148,7 @@ public class ActivityService : IActivityService
             };
             var createdActivity = await _socialRepository.CreateActivityAsync(activity);
 
-            if (createdActivity.Id <= 0)
+            if ((createdActivity?.Id ?? 0) <= 0)
             {
                 return new()
                 {
