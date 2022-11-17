@@ -14,7 +14,7 @@ namespace Api.Controllers;
 public class ActivityController : ExtendedControllerBase
 {
     private const int ACTIVITY_PAGINATION_COUNT = 10;
-    private const int RANDOM_ACTIVITY_COUNT = 20;
+    private const int RANDOM_ACTIVITY_COUNT = 5;
 
     private readonly ILogger<ActivityController> _logger;
     private readonly IActivityService _activityService;
@@ -50,7 +50,7 @@ public class ActivityController : ExtendedControllerBase
     [HttpGet("all/random")]
     public async Task<IActionResult> GetActivitiesRandomly()
     {
-        var response = await _activityService.GetActivitiesRandomlyAsync(ACTIVITY_PAGINATION_COUNT);
+        var response = await _activityService.GetActivitiesRandomlyAsync(RANDOM_ACTIVITY_COUNT);
 
         return HandleServiceResponse(response);
     }
