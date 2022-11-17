@@ -13,7 +13,8 @@ namespace Api.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ActivityController : ExtendedControllerBase
 {
-    private const int ACTIVITY_PAGINATION_COUNT = 50; // will be 20 or 25
+    private const int ACTIVITY_PAGINATION_COUNT = 10;
+    private const int RANDOM_ACTIVITY_COUNT = 20;
 
     private readonly ILogger<ActivityController> _logger;
     private readonly IActivityService _activityService;
@@ -42,6 +43,14 @@ public class ActivityController : ExtendedControllerBase
         skip += ACTIVITY_PAGINATION_COUNT;
 
         HttpContext.Session.SetInt32(SessionItems.ActivitySkipKey, skip);
+
+        return HandleServiceResponse(response);
+    }
+
+    [HttpGet("all/random")]
+    public async Task<IActionResult> GetActivitiesRandomly()
+    {
+        var response = await _activityService.GetActivitiesRandomlyAsync(ACTIVITY_PAGINATION_COUNT);
 
         return HandleServiceResponse(response);
     }
