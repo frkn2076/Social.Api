@@ -54,6 +54,25 @@ public class ActivityService : IActivityService
         };
     }
 
+    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByTextAsync(int count, string key)
+    {
+        var activities = await _socialRepository.GetActivityRandomlyByKeyAsync(count, key);
+
+        if (!activities?.Any() ?? true)
+        {
+            return new()
+            {
+                Error = ErrorMessages.NoRecordHasFound
+            };
+        }
+
+        return new()
+        {
+            IsSuccessful = true,
+            Response = activities
+        };
+    }
+
     public async Task<ServiceResponse<IEnumerable<Activity>>> GetUserActivitiesAsync(int userId)
     {
         var activities = await _socialRepository.GetUserActivityAsync(userId);

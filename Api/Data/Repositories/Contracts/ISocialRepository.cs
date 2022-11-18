@@ -7,9 +7,9 @@ public interface ISocialRepository
 {
     Task<Profile> CreateProfileAsync(Profile profile, IDbTransaction transaction = null);
 
-    public Task<Activity> CreateActivityAsync(Activity activity, IDbTransaction transaction = null);
+    Task<Activity> CreateActivityAsync(Activity activity, IDbTransaction transaction = null);
 
-    public Task CreateProfileActivityAsync(int activityId, int profileId, IDbTransaction transaction = null);
+    Task CreateProfileActivityAsync(int activityId, int profileId, IDbTransaction transaction = null);
 
     Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null);
 
@@ -25,7 +25,9 @@ public interface ISocialRepository
 
     Task<IEnumerable<Activity>> GetActivityAsync(int count, int skip, IDbTransaction transaction = null);
 
-    public Task<IEnumerable<Activity>> GetActivityRandomlyAsync(int count, IDbTransaction transaction = null);
+    Task<IEnumerable<Activity>> GetActivityRandomlyAsync(int count, IDbTransaction transaction = null);
+
+    Task<IEnumerable<Activity>> GetActivityRandomlyByKeyAsync(int count, string key, IDbTransaction transaction = null);
 
     Task<IEnumerable<Activity>> GetUserActivityAsync(int id, IDbTransaction transaction = null);
 

@@ -55,6 +55,14 @@ public class ActivityController : ExtendedControllerBase
         return HandleServiceResponse(response);
     }
 
+    [HttpGet("all/random/search")]
+    public async Task<IActionResult> GetActivitiesRandomlyByKeyAsync(string key)
+    {
+        var response = await _activityService.GetActivitiesRandomlyByTextAsync(RANDOM_ACTIVITY_COUNT, key);
+
+        return HandleServiceResponse(response);
+    }
+
     [HttpGet("private/all")]
     public async Task<IActionResult> GetPrivateActivities()
     {

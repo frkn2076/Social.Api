@@ -41,6 +41,8 @@ public static class Constants
         
         public static string GetActivityRandomlyQuery = nameof(GetActivityRandomlyQuery);
 
+        public static string GetActivityRandomlyByKeyQuery = nameof(GetActivityRandomlyByKeyQuery);
+
         public static string GetUserActivityQuery = nameof(GetUserActivityQuery);
 
         public static string GetOwnerActivityQuery = nameof(GetOwnerActivityQuery);
