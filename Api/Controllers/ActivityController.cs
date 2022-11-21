@@ -114,7 +114,7 @@ public class ActivityController : ExtendedControllerBase
     {
         var userId = _currentUser.GetId();
 
-        var response = await _activityService.CreateActivityAsync(request.Title, request.Detail, request.Location, request.Date, request.PhoneNumber, userId);
+        var response = await _activityService.CreateActivityAsync(request.Title, request.Detail, request.Location, request.Date, request.PhoneNumber, request.Capacity, userId);
 
         return HandleServiceResponse(response);
     }

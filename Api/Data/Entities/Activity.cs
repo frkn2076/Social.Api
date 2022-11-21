@@ -15,4 +15,6 @@ public class Activity
     public string PhoneNumber { get; set; }
 
     public int OwnerProfileId { get; set; }
+
+    public int Capacity { get; set; }
 }

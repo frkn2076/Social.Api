@@ -11,4 +11,6 @@ public class CreateActivityRequestModel
     public string? Location { get; set; }
 
     public string? PhoneNumber { get; set; }
+
+    public int Capacity { get; set; }
 }

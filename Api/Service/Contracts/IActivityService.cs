@@ -20,5 +20,5 @@ public interface IActivityService
 
     Task<ServiceResponse<bool>> JoinActivityAsync(int profileId, int activityId);
 
-    Task<ServiceResponse<bool>> CreateActivityAsync(string title, string detail, string location, DateTime? date, string phoneNumber, int userId);
+    Task<ServiceResponse<bool>> CreateActivityAsync(string title, string detail, string location, DateTime? date, string phoneNumber, int capacity, int userId);
 }

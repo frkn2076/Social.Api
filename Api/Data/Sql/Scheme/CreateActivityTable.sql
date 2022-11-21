@@ -5,5 +5,6 @@
     location VARCHAR(100) NULL,
     date timestamp default NULL,
     phonenumber VARCHAR(100) NULL,
-    ownerprofileid NUMERIC (7) NOT NULL
+    ownerprofileid NUMERIC (7) NOT NULL,
+    capacity VARCHAR(100) NULL
 );

@@ -5,7 +5,7 @@
     name VARCHAR (20) NULL,
     surname VARCHAR (20) NULL,
     password VARCHAR (100) NOT NULL,
-    photo VARCHAR(1000) NULL,
+    photo VARCHAR(100000) NULL,
     about VARCHAR(1000) NULL,
     refreshToken VARCHAR(1000) NULL,
     expireDate timestamp default NULL,

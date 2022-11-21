@@ -4,12 +4,14 @@
 		  , location
 		  , date
 		  , phonenumber
-		  , ownerprofileid )
+		  , ownerprofileid
+		  , capacity)
 	 VALUES 
 	      ( @title
 		  , @detail
 		  , @location
 		  , @date
 		  , @phonenumber
-		  , @ownerprofileid )
+		  , @ownerprofileid
+		  , @capacity)
   RETURNING *

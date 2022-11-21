@@ -136,6 +136,7 @@ public class ActivityService : IActivityService
             Location = activity.Location,
             Title = activity.Title,
             PhoneNumber = activity.PhoneNumber,
+            Capacity = activity.Capacity,
             Joiners = joiners.Select(x => new UserResponseModel()
             {
                 Id = x.Id,
@@ -171,7 +172,7 @@ public class ActivityService : IActivityService
         }
     }
 
-    public async Task<ServiceResponse<bool>> CreateActivityAsync(string title, string detail, string location, DateTime? date, string phoneNumber, int userId)
+    public async Task<ServiceResponse<bool>> CreateActivityAsync(string title, string detail, string location, DateTime? date, string phoneNumber, int capacity, int userId)
     {
         try
         {
@@ -182,7 +183,8 @@ public class ActivityService : IActivityService
                 Location = location,
                 Date = date,
                 PhoneNumber = phoneNumber,
-                OwnerProfileId = userId
+                OwnerProfileId = userId,
+                Capacity = capacity
             };
             var createdActivity = await _socialRepository.CreateActivityAsync(activity);
 
