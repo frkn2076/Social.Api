@@ -2,6 +2,8 @@
 
 public class ActivityFilterRequestModel
 {
+    public string? Key { get; set; }
+
     public DateTime FromDate { get; set; }
 
     public DateTime ToDate { get; set; }

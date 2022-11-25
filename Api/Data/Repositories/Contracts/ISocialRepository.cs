@@ -27,7 +27,7 @@ public interface ISocialRepository
 
     Task<IEnumerable<Activity>> GetActivityRandomlyAsync(int count, IDbTransaction transaction = null);
 
-    Task<IEnumerable<Activity>> GetActivityRandomlyByFilterAsync(int count, DateTime fromDate, DateTime toDate, int fromCapacity, int toCapacity, IDbTransaction transaction = null);
+    Task<IEnumerable<Activity>> GetActivityRandomlyByFilterAsync(int count, string key, DateTime fromDate, DateTime toDate, int fromCapacity, int toCapacity, IDbTransaction transaction = null);
 
     Task<IEnumerable<Activity>> GetActivityRandomlyByKeyAsync(int count, string key, IDbTransaction transaction = null);
 

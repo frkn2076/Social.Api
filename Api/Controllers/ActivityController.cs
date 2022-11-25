@@ -122,7 +122,7 @@ public class ActivityController : ExtendedControllerBase
     [HttpPost("all/random/filter")]
     public async Task<IActionResult> FilterActivityAsync(ActivityFilterRequestModel request)
     {
-        var response = await _activityService.GetActivitiesRandomlyByFilterAsync(RANDOM_ACTIVITY_COUNT, request.FromDate, request.ToDate, request.FromCapacity, request.ToCapacity);
+        var response = await _activityService.GetActivitiesRandomlyByFilterAsync(RANDOM_ACTIVITY_COUNT, request.Key, request.FromDate, request.ToDate, request.FromCapacity, request.ToCapacity);
 
         return HandleServiceResponse(response);
     }

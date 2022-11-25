@@ -129,14 +129,14 @@ public class SocialRepository : ISocialRepository
         }
     }
 
-    public async Task<IEnumerable<Activity>> GetActivityRandomlyByFilterAsync(int count, DateTime fromDate, DateTime toDate,
+    public async Task<IEnumerable<Activity>> GetActivityRandomlyByFilterAsync(int count, string key, DateTime fromDate, DateTime toDate,
         int fromCapacity, int toCapacity, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
             return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetActivityRandomlyByFilterQuery),
-                new { count, fromDate, toDate, fromCapacity, toCapacity }, transaction: transaction);
+                new { count, key, fromDate, toDate, fromCapacity, toCapacity }, transaction: transaction);
         }
     }
 

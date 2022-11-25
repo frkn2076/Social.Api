@@ -54,10 +54,10 @@ public class ActivityService : IActivityService
         };
     }
 
-    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByFilterAsync(int count, DateTime fromDate, DateTime toDate,
+    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByFilterAsync(int count, string key, DateTime fromDate, DateTime toDate,
         int fromCapacity, int toCapacity)
     {
-        var activities = await _socialRepository.GetActivityRandomlyByFilterAsync(count, fromDate, toDate, fromCapacity, toCapacity);
+        var activities = await _socialRepository.GetActivityRandomlyByFilterAsync(count, key, fromDate, toDate, fromCapacity, toCapacity);
         
         if (!activities?.Any() ?? true)
         {
