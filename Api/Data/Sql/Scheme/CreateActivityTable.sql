@@ -6,5 +6,5 @@
     date timestamp default NULL,
     phonenumber VARCHAR(100) NULL,
     ownerprofileid NUMERIC (7) NOT NULL,
-    capacity VARCHAR(100) NULL
+    capacity NUMERIC(7) NULL
 );

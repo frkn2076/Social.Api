@@ -54,6 +54,26 @@ public class ActivityService : IActivityService
         };
     }
 
+    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByFilterAsync(int count, DateTime fromDate, DateTime toDate,
+        int fromCapacity, int toCapacity)
+    {
+        var activities = await _socialRepository.GetActivityRandomlyByFilterAsync(count, fromDate, toDate, fromCapacity, toCapacity);
+        
+        if (!activities?.Any() ?? true)
+        {
+            return new()
+            {
+                Error = ErrorMessages.NoRecordHasFound
+            };
+        }
+
+        return new()
+        {
+            IsSuccessful = true,
+            Response = activities
+        };
+    }
+
     public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByTextAsync(int count, string key)
     {
         var activities = await _socialRepository.GetActivityRandomlyByKeyAsync(count, key);

@@ -118,4 +118,12 @@ public class ActivityController : ExtendedControllerBase
 
         return HandleServiceResponse(response);
     }
+
+    [HttpPost("all/random/filter")]
+    public async Task<IActionResult> FilterActivityAsync(ActivityFilterRequestModel request)
+    {
+        var response = await _activityService.GetActivitiesRandomlyByFilterAsync(RANDOM_ACTIVITY_COUNT, request.FromDate, request.ToDate, request.FromCapacity, request.ToCapacity);
+
+        return HandleServiceResponse(response);
+    }
 }

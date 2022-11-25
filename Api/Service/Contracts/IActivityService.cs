@@ -10,6 +10,8 @@ public interface IActivityService
 
     Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyAsync(int count);
 
+    Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByFilterAsync(int count, DateTime fromDate, DateTime toDate, int fromCapacity, int toCapacity);
+
     Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByTextAsync(int count, string key);
 
     Task<ServiceResponse<IEnumerable<Activity>>> GetUserActivitiesAsync(int userId);
