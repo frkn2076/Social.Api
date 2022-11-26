@@ -3,12 +3,12 @@
 <br>
 
 ## Features
-* ### Authorization
+* ### Authentication
   | Service               | Method        | Endpoint                  |
   | --------------------- |:-------------:| ------------------------- |
-  | Register              | POST          | authorization/register    |
-  | Login                 | POST          | authorization/login       |
-  | Refresh token         | GET           | authorization/refresh     |
+  | Register              | POST          | authentication/register   |
+  | Login                 | POST          | authentication/login      |
+  | Refresh token         | GET           | authentication/refresh    |
 * ### Profile
   | Service               | Method        | Endpoint                  |
   | --------------------- |:-------------:| ------------------------- |

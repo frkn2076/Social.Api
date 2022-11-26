@@ -5,9 +5,9 @@ namespace Api.Service.Contracts;
 
 public interface IAuthenticationService
 {
-    Task<ServiceResponse<AuthenticationResponseModel>> Register(string userName, string userPassword);
+    Task<ServiceResponse<AuthenticationResponseModel>> RegisterAsync(string userName, string userPassword);
 
-    Task<ServiceResponse<AuthenticationResponseModel>> Login(string userName, string userPassword);
+    Task<ServiceResponse<AuthenticationResponseModel>> LoginAsync(string userName, string userPassword);
 
-    Task<ServiceResponse<AuthenticationResponseModel>> GenerateTokenByRefreshToken(string refreshToken);
+    Task<ServiceResponse<AuthenticationResponseModel>> LoginByIdAsync(int userId);
 }

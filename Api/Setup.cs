@@ -48,7 +48,7 @@ public static class Setup
         services.AddScoped<CurrentUser>();
 
         var jwtSettings = builder.Configuration.GetOptions<JWTSettings>();
-        services.RegisterJWTAuthorization(jwtSettings);
+        services.RegisterJWTAuthentication(jwtSettings);
 
         services.AddCors();
 
@@ -110,7 +110,7 @@ public static class Setup
         await socialRepository.CreateProfileAsync(admin);
     }
 
-    private static void RegisterJWTAuthorization(this IServiceCollection services, JWTSettings settings)
+    private static void RegisterJWTAuthentication(this IServiceCollection services, JWTSettings settings)
     {
         var key = Encoding.ASCII.GetBytes(settings.SecretKey);
         services.AddAuthentication(x =>

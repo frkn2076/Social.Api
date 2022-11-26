@@ -1,4 +1,5 @@
 using Api;
+using Api.Middleware;
 using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,8 @@ app.UseCors(x => x
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<AuthenticationMiddlewareForRefreshToken>();
 
 app.MapControllers();
 

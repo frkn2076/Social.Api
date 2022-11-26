@@ -1,6 +1,5 @@
 ﻿using Api.Data.Entities;
 using Api.Data.Repositories.Contracts;
-using Api.Enums;
 using Api.Helper;
 using Api.Infra;
 using Api.Service.Contracts;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Api.Service.Implementations;
@@ -27,7 +25,7 @@ public class AuthenticationService : IAuthenticationService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public async Task<ServiceResponse<AuthenticationResponseModel>> Register(string userName, string userPassword)
+    public async Task<ServiceResponse<AuthenticationResponseModel>> RegisterAsync(string userName, string userPassword)
     {
         var encryptedPassword = CryptoHelper.EncryptPassword(userPassword);
 
@@ -57,10 +55,10 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        return await GenerateTokenByCredentialsAsync(createdProfile);
+        return GenerateToken(createdProfile.Id);
     }
 
-    public async Task<ServiceResponse<AuthenticationResponseModel>> Login(string userName, string userPassword)
+    public async Task<ServiceResponse<AuthenticationResponseModel>> LoginAsync(string userName, string userPassword)
     {
         var user = await _socialRepository.GetProfileByUserNameAsync(userName);
 
@@ -82,12 +80,12 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        return await GenerateTokenByCredentialsAsync(user);
+        return GenerateToken(user.Id);
     }
 
-    public async Task<ServiceResponse<AuthenticationResponseModel>> GenerateTokenByRefreshToken(string refreshToken)
+    public async Task<ServiceResponse<AuthenticationResponseModel>> LoginByIdAsync(int userId)
     {
-        var user = await _socialRepository.GetProfileByRefreshTokenAsync(refreshToken);
+        var user = await _socialRepository.GetProfileByIdAsync(userId);
 
         if (user == null)
         {
@@ -97,77 +95,38 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        if (user.ExpireDate.AddMinutes(_jwtSettings.RefreshExpireDate) < DateTime.UtcNow)
-        {
-            return new()
-            {
-                Error = ErrorMessages.TokenExpired
-            };
-        }
-
-        var token = GenerateJwtToken(user);
-        var newRefreshToken = GenerateRefreshToken();
-
-        await _socialRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshExpireDate));
-
-        var response = new AuthenticationResponseModel()
-        {
-            AccessToken = token,
-            AccessTokenExpireDate = _jwtSettings.AccessExpireDate,
-            RefreshToken = newRefreshToken,
-            RefreshTokenExpireDate = _jwtSettings.RefreshExpireDate
-        };
-
-        return new()
-        {
-            IsSuccessful = true,
-            Response = response
-        };
+        return GenerateToken(user.Id);
     }
 
     #region Helper
 
-    private async Task<ServiceResponse<AuthenticationResponseModel>> GenerateTokenByCredentialsAsync(Profile user)
+    private ServiceResponse<AuthenticationResponseModel> GenerateToken(int userId)
     {
-        var token = GenerateJwtToken(user);
-
-        var refreshToken = GenerateRefreshToken();
-
-        var response = new AuthenticationResponseModel()
+        var token = new AuthenticationResponseModel()
         {
-            AccessToken = token,
+            AccessToken = GenerateJWTToken(userId, false),
             AccessTokenExpireDate = _jwtSettings.AccessExpireDate,
-            RefreshToken = refreshToken,
+            RefreshToken = GenerateJWTToken(userId, true),
             RefreshTokenExpireDate = _jwtSettings.RefreshExpireDate
         };
 
         return new()
         {
             IsSuccessful = true,
-            Response = response
+            Response = token
         };
     }
 
-    private string GenerateJwtToken(Profile user)
+    private string GenerateJWTToken(int userId, bool isRefreshToken)
     {
         var claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.SerialNumber, user.Id.ToString())
+            new Claim(ClaimTypes.SerialNumber, userId.ToString())
         };
 
-        if (!string.IsNullOrEmpty(user.UserName))
+        if (isRefreshToken)
         {
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserName));
-        }
-
-        if (!string.IsNullOrEmpty(user.Email))
-        {
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
-        }
-
-        if(!string.IsNullOrEmpty(user.Role))
-        {
-            claims.Add(new Claim(ClaimTypes.Role, user.Role));
+            claims.Add(new Claim(ClaimTypes.AuthorizationDecision, "RefreshToken"));
         }
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -175,19 +134,11 @@ public class AuthenticationService : IAuthenticationService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessExpireDate),
+            Expires = DateTime.UtcNow.AddHours(isRefreshToken ? _jwtSettings.RefreshExpireDate : _jwtSettings.AccessExpireDate),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
-    }
-
-    private string GenerateRefreshToken()
-    {
-        using var rng = RandomNumberGenerator.Create();
-        var randomBytes = new byte[64];
-        rng.GetBytes(randomBytes);
-        return Convert.ToBase64String(randomBytes);
     }
 
     #endregion Helper
