@@ -61,12 +61,12 @@ public class SocialRepository : ISocialRepository
         }
     }
 
-    public async Task<bool> UpdateProfileAsync(int id, string name, string surname, string photo, string about, IDbTransaction transaction = null)
+    public async Task<bool> UpdateProfileAsync(int id, string name, string photo, string about, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            var affectedRows = await connection.ExecuteAsync(GetQuery(Constants.Queries.UpdateProfileQuery), new { id, name, surname, photo, about },
+            var affectedRows = await connection.ExecuteAsync(GetQuery(Constants.Queries.UpdateProfileQuery), new { id, name, photo, about },
                 transaction: transaction);
             return affectedRows > 0;
         }

@@ -34,9 +34,9 @@ public class ProfileService : IProfileService
         };
     }
 
-    public async Task<ServiceResponse<bool>> UpdateProfileAsync(int id, string name, string surname, string photo, string about)
+    public async Task<ServiceResponse<bool>> UpdateProfileAsync(int id, string name, string photo, string about)
     {
-        var isSucceed = await _socialRepository.UpdateProfileAsync(id, name, surname, photo, about);
+        var isSucceed = await _socialRepository.UpdateProfileAsync(id, name, photo, about);
 
         if (!isSucceed)
         {

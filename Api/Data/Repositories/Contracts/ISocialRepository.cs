@@ -15,7 +15,7 @@ public interface ISocialRepository
 
     Task<Profile> GetProfileByIdAsync(int id, IDbTransaction transaction = null);
 
-    Task<bool> UpdateProfileAsync(int id, string name, string surname, string photo, string about, IDbTransaction transaction = null);
+    Task<bool> UpdateProfileAsync(int id, string name, string photo, string about, IDbTransaction transaction = null);
 
     Task<IEnumerable<Activity>> GetActivityAsync(int count, int skip, IDbTransaction transaction = null);
 
