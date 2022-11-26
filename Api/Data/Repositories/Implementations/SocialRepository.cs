@@ -43,24 +43,6 @@ public class SocialRepository : ISocialRepository
         }
     }
 
-    public async Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null)
-    {
-        using (var connection = new NpgsqlConnection(_connectionString))
-        {
-            connection.Open();
-            return await connection.QueryFirstAsync<string>(GetQuery(Constants.Queries.GetPasswordQuery), new { email }, transaction: transaction);
-        }
-    }
-
-    public async Task<Profile> GetProfileByRefreshTokenAsync(string refreshToken, IDbTransaction transaction = null)
-    {
-        using (var connection = new NpgsqlConnection(_connectionString))
-        {
-            connection.Open();
-            return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Constants.Queries.GetProfileByRefreshTokenQuery), new { refreshToken }, transaction: transaction);
-        }
-    }
-
     public async Task<Profile> GetProfileByUserNameAsync(string userName, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))
@@ -77,18 +59,6 @@ public class SocialRepository : ISocialRepository
             connection.Open();
             return await connection.QueryFirstOrDefaultAsync<Profile>(GetQuery(Constants.Queries.GetProfileByIdQuery), new { id }, transaction: transaction);
         }
-    }
-
-    public async Task<bool> UpdateRefreshTokenAsync(int id, string refreshToken, DateTime expireDate, IDbTransaction transaction = null)
-    {
-        using (var connection = new NpgsqlConnection(_connectionString))
-        {
-            connection.Open();
-            var affectedRows = await connection.ExecuteAsync(GetQuery(Constants.Queries.UpdateRefreshTokenQuery), new { id, refreshToken, expireDate },
-                transaction: transaction);
-            return affectedRows > 0;
-        }
-
     }
 
     public async Task<bool> UpdateProfileAsync(int id, string name, string surname, string photo, string about, IDbTransaction transaction = null)

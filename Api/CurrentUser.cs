@@ -24,11 +24,6 @@ public class CurrentUser
         return _claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
-    public string? GetEmail()
-    {
-        return _claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
-    }
-
     public bool IsAdmin()
     {
         return _claimsIdentity.FindFirst(ClaimTypes.Role)?.Value == Roles.Admin;

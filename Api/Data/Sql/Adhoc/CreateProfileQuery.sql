@@ -1,21 +1,15 @@
 ﻿INSERT INTO public.profile
 	      ( userName
-		  , email
 		  , password
 		  , name
-		  , surname
 		  , photo 
-		  , refreshToken
-		  , expireDate
-		  , role )
+		  , role
+		  , about)
 	 VALUES 
 	      ( @userName
-		  , @email
 		  , @password
 		  , @name
-		  , @surname
 		  , @photo
-		  , @refreshToken
-		  , @expireDate
-		  , @role )
+		  , @role
+		  , @about)
   RETURNING *

@@ -1,17 +1,11 @@
-﻿using Api.Data;
-using Api.Data.Entities;
-using Api.Data.Repositories.Contracts;
+﻿using Api.Data.Repositories.Contracts;
 using Api.Data.Repositories.Implementations;
-using Api.Enums;
 using Api.Extensions;
 using Api.Service.Contracts;
 using Api.Service.Implementations;
-using Api.Utils;
 using Api.Utils.Models;
-using Dapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql;
 using System.Text;
 
 namespace Api;
@@ -29,10 +23,7 @@ public static class Setup
 
         services.AddHttpContextAccessor();
 
-        services.AddSession(option =>
-        {
-            option.IdleTimeout = TimeSpan.FromMinutes(1);
-        });
+        services.AddSession(x => x.IdleTimeout = TimeSpan.FromHours(1));
 
         services.AddDistributedMemoryCache();
 
@@ -51,64 +42,9 @@ public static class Setup
         services.RegisterJWTAuthentication(jwtSettings);
 
         services.AddCors();
-
-        var serviceProvider = services.BuildServiceProvider();
-
-        #region Create DB Schemes
-
-        var postgresConnectionString = builder.Configuration.GetConnectionString("PostgresContext");
-        await CreateSchemesAsync(postgresConnectionString);
-
-        var adminCredentials = builder.Configuration.GetOptions<AdminCredentials>();
-        await serviceProvider.TempAdminCredentialsRegisterAsync(adminCredentials);
-
-        #endregion
     }
 
     #region Helper
-
-    private static async Task CreateSchemesAsync(string postgresConnectionString)
-    {
-        var currentDirectory = Directory.GetCurrentDirectory();
-        var folderPath = Path.Combine(currentDirectory, Constants.SchemeFolderPath);
-        var schemeQueryFileNames = Directory.GetFiles(folderPath);
-        
-        using (var connection = new NpgsqlConnection(postgresConnectionString))
-        {
-            connection.Open();
-
-            using (var transaction = connection.BeginTransaction())
-            {
-                foreach (var schemeQueryFileName in schemeQueryFileNames)
-                {
-                    var schemeQuery = FileResourceUtility.LoadResource(folderPath, schemeQueryFileName);
-                    await connection.ExecuteAsync(schemeQuery, transaction: transaction);
-                }
-                transaction.Commit();
-            }
-        }
-    }
-
-    private static async Task TempAdminCredentialsRegisterAsync(this ServiceProvider serviceProvider, AdminCredentials adminCredentials)
-    {
-        var socialRepository = serviceProvider.GetRequiredService<ISocialRepository>();
-
-        var admin = new Profile()
-        {
-            UserName = adminCredentials.UserName,
-            Password = adminCredentials.EncryptedPassword,
-            Role = Roles.Admin
-        };
-
-        var profile = await socialRepository.GetProfileByUserNameAsync(adminCredentials.UserName);
-
-        if (profile != null)
-        {
-            return;
-        }
-
-        await socialRepository.CreateProfileAsync(admin);
-    }
 
     private static void RegisterJWTAuthentication(this IServiceCollection services, JWTSettings settings)
     {

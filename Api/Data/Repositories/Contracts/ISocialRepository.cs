@@ -11,13 +11,7 @@ public interface ISocialRepository
 
     Task CreateProfileActivityAsync(int activityId, int profileId, IDbTransaction transaction = null);
 
-    Task<string> GetPasswordAsync(string email, IDbTransaction transaction = null);
-
-    Task<Profile> GetProfileByRefreshTokenAsync(string refreshToken, IDbTransaction transaction = null);
-
     Task<Profile> GetProfileByUserNameAsync(string userName, IDbTransaction transaction = null);
-
-    Task<bool> UpdateRefreshTokenAsync(int id, string refreshToken, DateTime expireDate, IDbTransaction transaction = null);
 
     Task<Profile> GetProfileByIdAsync(int id, IDbTransaction transaction = null);
 

@@ -48,13 +48,7 @@
 		<None Update="Data\Sql\Adhoc\GetActivityQuery.sql">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Data\Sql\Adhoc\GetPasswordQuery.sql">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<None Update="Data\Sql\Adhoc\GetProfileByIdQuery.sql">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Data\Sql\Adhoc\GetProfileByRefreshTokenQuery.sql">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Data\Sql\Adhoc\GetProfileByUserNameQuery.sql">
@@ -70,19 +64,6 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Data\Sql\Adhoc\UpdateProfileQuery.sql">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Data\Sql\Adhoc\UpdateRefreshTokenQuery.sql">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		
-		<None Update="Data\Sql\Scheme\CreateActivityTable.sql">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Data\Sql\Scheme\CreateProfileActivityTable.sql">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Data\Sql\Scheme\CreateProfileTable.sql">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

@@ -1,9 +1,3 @@
-﻿SELECT id
-     , username
-     , email
-     , password
-     , name
-     , photo
-     , about
+﻿SELECT *
   FROM public.profile
  WHERE id = @id
