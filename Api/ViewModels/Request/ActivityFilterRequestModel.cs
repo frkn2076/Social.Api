@@ -11,4 +11,6 @@ public class ActivityFilterRequestModel
     public int FromCapacity { get; set; }
 
     public int ToCapacity { get; set; }
+
+    public List<string> Categories { get; set; }
 }
