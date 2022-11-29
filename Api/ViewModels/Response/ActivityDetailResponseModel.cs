@@ -18,5 +18,7 @@ public class ActivityDetailResponseModel
 
     public int Capacity { get; set; }
 
+    public string Category { get; set; }
+
     public List<UserResponseModel> Joiners { get; set; }
 }

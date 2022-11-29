@@ -35,49 +35,11 @@ public class ActivityService : IActivityService
         };
     }
 
-    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyAsync(int count)
-    {
-        var activities = await _socialRepository.GetActivityRandomlyAsync(count);
-
-        if (!activities?.Any() ?? true)
-        {
-            return new()
-            {
-                Error = ErrorMessages.NoRecordHasFound
-            };
-        }
-
-        return new()
-        {
-            IsSuccessful = true,
-            Response = activities
-        };
-    }
-
     public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByFilterAsync(int count, string key, DateTime fromDate, DateTime toDate,
         int fromCapacity, int toCapacity)
     {
         var activities = await _socialRepository.GetActivityRandomlyByFilterAsync(count, key, fromDate, toDate, fromCapacity, toCapacity);
         
-        if (!activities?.Any() ?? true)
-        {
-            return new()
-            {
-                Error = ErrorMessages.NoRecordHasFound
-            };
-        }
-
-        return new()
-        {
-            IsSuccessful = true,
-            Response = activities
-        };
-    }
-
-    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByTextAsync(int count, string key)
-    {
-        var activities = await _socialRepository.GetActivityRandomlyByKeyAsync(count, key);
-
         if (!activities?.Any() ?? true)
         {
             return new()
@@ -157,6 +119,7 @@ public class ActivityService : IActivityService
             Title = activity.Title,
             PhoneNumber = activity.PhoneNumber,
             Capacity = activity.Capacity,
+            Category = activity.Category,
             Joiners = joiners.Select(x => new UserResponseModel()
             {
                 Id = x.Id,
@@ -192,7 +155,7 @@ public class ActivityService : IActivityService
         }
     }
 
-    public async Task<ServiceResponse<bool>> CreateActivityAsync(string title, string detail, string location, DateTime? date, string phoneNumber, int capacity, int userId)
+    public async Task<ServiceResponse<bool>> CreateActivityAsync(string title, string detail, string location, DateTime? date, string phoneNumber, int capacity, string category, int userId)
     {
         try
         {
@@ -204,7 +167,8 @@ public class ActivityService : IActivityService
                 Date = date,
                 PhoneNumber = phoneNumber,
                 OwnerProfileId = userId,
-                Capacity = capacity
+                Capacity = capacity,
+                Category = category,
             };
             var createdActivity = await _socialRepository.CreateActivityAsync(activity);
 

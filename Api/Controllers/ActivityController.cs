@@ -47,22 +47,6 @@ public class ActivityController : ExtendedControllerBase
         return HandleServiceResponse(response);
     }
 
-    //[HttpGet("all/random")]
-    //public async Task<IActionResult> GetActivitiesRandomly()
-    //{
-    //    var response = await _activityService.GetActivitiesRandomlyAsync(RANDOM_ACTIVITY_COUNT);
-
-    //    return HandleServiceResponse(response);
-    //}
-
-    //[HttpGet("all/random/search")]
-    //public async Task<IActionResult> GetActivitiesRandomlyByKeyAsync(string key)
-    //{
-    //    var response = await _activityService.GetActivitiesRandomlyByTextAsync(RANDOM_ACTIVITY_COUNT, key);
-
-    //    return HandleServiceResponse(response);
-    //}
-
     [HttpGet("private/all")]
     public async Task<IActionResult> GetPrivateActivities()
     {
@@ -114,7 +98,7 @@ public class ActivityController : ExtendedControllerBase
     {
         var userId = _currentUser.GetId();
 
-        var response = await _activityService.CreateActivityAsync(request.Title, request.Detail, request.Location, request.Date, request.PhoneNumber, request.Capacity, userId);
+        var response = await _activityService.CreateActivityAsync(request.Title, request.Detail, request.Location, request.Date, request.PhoneNumber, request.Capacity, request.Category, userId);
 
         return HandleServiceResponse(response);
     }

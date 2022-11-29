@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS public.activity (
     date timestamp default NULL,
     phonenumber VARCHAR(100) NULL,
     ownerprofileid NUMERIC (7) NOT NULL,
-    capacity NUMERIC(7) NULL
+    capacity NUMERIC(7) NULL,
+    category VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS profile_activity (

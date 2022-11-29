@@ -17,4 +17,6 @@ public class Activity
     public int OwnerProfileId { get; set; }
 
     public int Capacity { get; set; }
+
+    public string Category { get; set; }
 }

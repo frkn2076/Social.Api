@@ -36,13 +36,7 @@
 		<None Update="Data\Sql\Adhoc\GetActivityByIdQuery.sql">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Data\Sql\Adhoc\GetActivityRandomlyByKeyQuery.sql">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<None Update="Data\Sql\Adhoc\GetActivityRandomlyByFilterQuery.sql">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Data\Sql\Adhoc\GetActivityRandomlyQuery.sql">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Data\Sql\Adhoc\GetActivityQuery.sql">

@@ -5,7 +5,8 @@
 		  , date
 		  , phonenumber
 		  , ownerprofileid
-		  , capacity)
+		  , capacity
+		  , category)
 	 VALUES 
 	      ( @title
 		  , @detail
@@ -13,5 +14,6 @@
 		  , @date
 		  , @phonenumber
 		  , @ownerprofileid
-		  , @capacity)
+		  , @capacity
+		  , @category)
   RETURNING *
