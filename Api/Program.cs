@@ -48,4 +48,5 @@ app.MapControllers();
 
 app.UseSession();
 
+Console.WriteLine("Started running");
 app.Run();
