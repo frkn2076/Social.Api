@@ -5,8 +5,7 @@ services:
     restart: always
     build: Api/.
     ports:
-      - '8080:80'
-      - '8081:443'
+      - '5001:443'
     environment:
       ASPNETCORE_URLS: https://+:443;http://+:80
       ASPNETCORE_HTTPS_PORT: 8081
