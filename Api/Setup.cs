@@ -18,6 +18,8 @@ public static class Setup
 
         services.AddControllers();
 
+        services.AddHealthChecks();
+
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
