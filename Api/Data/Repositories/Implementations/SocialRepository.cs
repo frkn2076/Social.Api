@@ -81,24 +81,6 @@ public class SocialRepository : ISocialRepository
         }
     }
 
-    public async Task<IEnumerable<Activity>> GetActivityRandomlyAsync(int count, IDbTransaction transaction = null)
-    {
-        using (var connection = new NpgsqlConnection(_connectionString))
-        {
-            connection.Open();
-            return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetActivityRandomlyQuery), new { count }, transaction: transaction);
-        }
-    }
-
-    public async Task<IEnumerable<Activity>> GetActivityRandomlyByKeyAsync(int count, string key, IDbTransaction transaction = null)
-    {
-        using (var connection = new NpgsqlConnection(_connectionString))
-        {
-            connection.Open();
-            return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetActivityRandomlyByKeyQuery), new { count, key }, transaction: transaction);
-        }
-    }
-
     public async Task<IEnumerable<Activity>> GetActivityRandomlyByFilterAsync(int count, string key, DateTime fromDate, DateTime toDate,
         int fromCapacity, int toCapacity, List<string> categories, IDbTransaction transaction = null)
     {
