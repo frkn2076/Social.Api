@@ -6,6 +6,14 @@ services:
     build: Api/.
     ports:
       - '8080:80'
+      - '8081:443'
+    environment:
+      ASPNETCORE_URLS: https://+:443;http://+:80
+      ASPNETCORE_HTTPS_PORT: 8081
+      ASPNETCORE_Kestrel__Certificates__Default__Password: sEcREtpaSsWord
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/httpscertificate.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
     depends_on:
       - db
       
