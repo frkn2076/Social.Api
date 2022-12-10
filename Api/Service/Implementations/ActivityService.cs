@@ -20,14 +20,6 @@ public class ActivityService : IActivityService
     {
         var activities = await _socialRepository.GetActivityAsync(count, skip);
 
-        if (!activities?.Any() ?? true)
-        {
-            return new()
-            {
-                Error = ErrorMessages.NoRecordHasFound
-            };
-        }
-
         return new()
         {
             IsSuccessful = true,
@@ -40,14 +32,6 @@ public class ActivityService : IActivityService
     {
         var activities = await _socialRepository.GetActivityRandomlyByFilterAsync(count, key, fromDate, toDate, fromCapacity, toCapacity, categories);
         
-        if (!activities?.Any() ?? true)
-        {
-            return new()
-            {
-                Error = ErrorMessages.NoRecordHasFound
-            };
-        }
-
         return new()
         {
             IsSuccessful = true,
@@ -59,14 +43,6 @@ public class ActivityService : IActivityService
     {
         var activities = await _socialRepository.GetUserActivityAsync(userId);
 
-        if (activities == null || !activities.Any())
-        {
-            return new()
-            {
-                Error = ErrorMessages.NoRecordHasFound
-            };
-        }
-
         return new()
         {
             IsSuccessful = true,
@@ -77,14 +53,6 @@ public class ActivityService : IActivityService
     public async Task<ServiceResponse<IEnumerable<Activity>>> GetOwnerActivitiesAsync(int userId)
     {
         var activities = await _socialRepository.GetOwnerActivityAsync(userId);
-
-        if (activities == null || !activities.Any())
-        {
-            return new()
-            {
-                Error = ErrorMessages.NoRecordHasFound
-            };
-        }
 
         return new()
         {
