@@ -16,9 +16,9 @@ public class ActivityService : IActivityService
         _socialRepository = socialRepository;
     }
 
-    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesAsync(int count, int skip)
+    public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesByFilterPaginationAsync(int skip, int count, string key, DateTime fromDate, DateTime toDate, int fromCapacity, int toCapacity, List<string> categories)
     {
-        var activities = await _socialRepository.GetActivityAsync(count, skip);
+        var activities = await _socialRepository.GetActivityPaginationFilterAsync(skip, count, key, fromDate, toDate, fromCapacity, toCapacity, categories);
 
         return new()
         {

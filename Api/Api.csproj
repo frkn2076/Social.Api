@@ -39,7 +39,7 @@
 		<None Update="Data\Sql\Adhoc\GetActivityRandomlyByFilterQuery.sql">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Data\Sql\Adhoc\GetActivityQuery.sql">
+		<None Update="Data\Sql\Adhoc\GetActivityPaginationFilterQuery.sql">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Data\Sql\Adhoc\GetProfileByIdQuery.sql">

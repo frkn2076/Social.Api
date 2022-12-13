@@ -33,12 +33,13 @@ public class ActivityController : ExtendedControllerBase
         return Ok($"{nameof(ActivityController)} works properly!");
     }
 
-    [HttpGet("all/{isRefresh?}")]
-    public async Task<IActionResult> GetActivities(bool isRefresh)
+    [HttpPost("pagination")]
+    public async Task<IActionResult> GetActivities(ActivityPaginationFilterRequestModel request)
     {
-        var skip = isRefresh ? 0 : HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
+        var skip = isFilterChanged(request) ? 0 : HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
 
-        var response = await _activityService.GetActivitiesAsync(ACTIVITY_PAGINATION_COUNT, skip);
+        var response = await _activityService.GetActivitiesByFilterPaginationAsync(skip, ACTIVITY_PAGINATION_COUNT, request.Key,
+            request.FromDate, request.ToDate, request.FromCapacity, request.ToCapacity, request.Categories);
 
         skip += ACTIVITY_PAGINATION_COUNT;
 
@@ -110,4 +111,35 @@ public class ActivityController : ExtendedControllerBase
 
         return HandleServiceResponse(response);
     }
+
+    #region Helper
+
+    private bool isFilterChanged(ActivityPaginationFilterRequestModel request)
+    {
+        var key = HttpContext.Session.GetString(SessionItems.SearchKeyFilterKey);
+        var fromDate = HttpContext.Session.GetString(SessionItems.FromDateFilterKey);
+        var toDate = HttpContext.Session.GetString(SessionItems.ToDateFilterKey);
+        var fromCapacity = HttpContext.Session.GetInt32(SessionItems.FromCapacityFilterKey);
+        var toCapacity = HttpContext.Session.GetInt32(SessionItems.ToCapacityFilterKey);
+        var categories = HttpContext.Session.GetString(SessionItems.CategoriesFilterKey);
+
+        var isFilterChanged = request.IsRefresh
+            || key is not null && (key ?? string.Empty) != (request.Key ?? string.Empty)
+            || fromCapacity is not null && fromCapacity != request.FromCapacity
+            || toCapacity is not null && toCapacity != request.ToCapacity
+            || fromDate is not null &&  fromDate != request.FromDate.ToString()
+            || toDate is not null && toDate != request.ToDate.ToString()
+            || categories is not null && categories != string.Join(',', request.Categories);
+
+        HttpContext.Session.SetString(SessionItems.SearchKeyFilterKey, request.Key ?? string.Empty);
+        HttpContext.Session.SetString(SessionItems.FromDateFilterKey, request.FromDate.ToString());
+        HttpContext.Session.SetString(SessionItems.ToDateFilterKey, request.ToDate.ToString());
+        HttpContext.Session.SetInt32(SessionItems.FromCapacityFilterKey, request.FromCapacity);
+        HttpContext.Session.SetInt32(SessionItems.ToCapacityFilterKey, request.ToCapacity);
+        HttpContext.Session.SetString(SessionItems.CategoriesFilterKey, string.Join(',', request.Categories));
+        
+        return isFilterChanged;
+    }
+
+    #endregion
 }

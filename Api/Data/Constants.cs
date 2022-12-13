@@ -22,7 +22,7 @@ public static class Constants
 
         public static string UpdateProfileQuery = nameof(UpdateProfileQuery);
 
-        public static string GetActivityQuery = nameof(GetActivityQuery);
+        public static string GetActivityPaginationFilterQuery = nameof(GetActivityPaginationFilterQuery);
         
         public static string GetActivityRandomlyQuery = nameof(GetActivityRandomlyQuery);
 

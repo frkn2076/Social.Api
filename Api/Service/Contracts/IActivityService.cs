@@ -6,7 +6,7 @@ namespace Api.Service.Contracts;
 
 public interface IActivityService
 {
-    Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesAsync(int skip, int count);
+    Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesByFilterPaginationAsync(int skip, int count, string key, DateTime fromDate, DateTime toDate, int fromCapacity, int toCapacity, List<string> categories);
 
     Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesRandomlyByFilterAsync(int count, string key, DateTime fromDate, DateTime toDate, int fromCapacity, int toCapacity, List<string> categories);
 

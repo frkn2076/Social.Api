@@ -72,12 +72,12 @@ public class SocialRepository : ISocialRepository
         }
     }
 
-    public async Task<IEnumerable<Activity>> GetActivityAsync(int count, int skip, IDbTransaction transaction = null)
+    public async Task<IEnumerable<Activity>> GetActivityPaginationFilterAsync(int skip, int count, string key, DateTime fromDate, DateTime toDate, int fromCapacity, int toCapacity, List<string> categories, IDbTransaction transaction = null)
     {
         using (var connection = new NpgsqlConnection(_connectionString))
         {
             connection.Open();
-            return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetActivityQuery), new { count, skip }, transaction: transaction);
+            return await connection.QueryAsync<Activity>(GetQuery(Constants.Queries.GetActivityPaginationFilterQuery), new { skip, count, key, fromDate, toDate, fromCapacity, toCapacity, categories }, transaction: transaction);
         }
     }
 
