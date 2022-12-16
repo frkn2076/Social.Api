@@ -1,4 +1,5 @@
 using Api.Extensions;
+using Api.Filters;
 using Api.Infra;
 using Api.Service.Contracts;
 using Api.Utils.Constants;
@@ -33,14 +34,14 @@ public class AuthenticationController : ExtendedControllerBase
         return Ok($"{nameof(AuthenticationController)} works properly!");
     }
 
-    [HttpPost("register")]
+    [HttpPost("register"), CookieSetFilter]
     public async Task<IActionResult> Register(RegisterRequestModel request)
     {
         var response = await _authenticationService.RegisterAsync(request.UserName, request.Password);
         return HandleServiceResponse(response);
     }
 
-    [HttpPost("login")]
+    [HttpPost("login"), CookieSetFilter]
     public async Task<IActionResult> Login(RegisterRequestModel request)
     {
         var response = await _authenticationService.LoginAsync(request.UserName, request.Password);
@@ -48,7 +49,7 @@ public class AuthenticationController : ExtendedControllerBase
     }
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpGet("refresh")]
+    [HttpGet("refresh"), CookieSetFilter]
     public async Task<IActionResult> Refresh()
     {
         var isRefreshToken = HttpContext.User.IsRefreshToken();

@@ -42,11 +42,11 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseSession();
+
 app.UseMiddleware<AuthenticationMiddlewareForRefreshToken>();
 
 app.MapControllers();
-
-app.UseSession();
 
 app.UseHealthChecks("/health");
 
