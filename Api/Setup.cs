@@ -1,4 +1,6 @@
-﻿using Api.Data.Repositories.Contracts;
+﻿using Api.Data.NoSql.Contracts;
+using Api.Data.NoSql.Implementations;
+using Api.Data.Repositories.Contracts;
 using Api.Data.Repositories.Implementations;
 using Api.Extensions;
 using Api.Service.Contracts;
@@ -12,11 +14,13 @@ namespace Api;
 
 public static class Setup
 {
-    public static async void ConfigureServices(this WebApplicationBuilder builder)
+    public static void ConfigureServices(this WebApplicationBuilder builder)
     {
         var services = builder.Services;
 
         services.AddControllers();
+
+        services.AddSignalR().AddMessagePackProtocol();
 
         services.AddHealthChecks();
 
@@ -32,7 +36,8 @@ public static class Setup
         services.Configure<JWTSettings>(builder.Configuration.GetSection(nameof(JWTSettings)));
         services.Configure<AdminCredentials>(builder.Configuration.GetSection(nameof(AdminCredentials)));
 
-        services.AddTransient<ISocialRepository, SocialRepository>();
+        services.AddScoped<ISocialRepository, SocialRepository>();
+        services.AddScoped<IMongoDBRepository, MongoDBRepository>();
 
         services.AddTransient<IActivityService, ActivityService>();
         services.AddTransient<IAuthenticationService, AuthenticationService>();

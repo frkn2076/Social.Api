@@ -17,14 +17,26 @@ services:
       - db
       
   db:
-   image: postgres
-   restart: always
-   environment:
-     POSTGRES_PASSWORD: example
-     POSTGRES_DB: my_db
-   volumes:
-      - volume:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: my_db
+    volumes:
+       - db-volume:/var/lib/postgresql/data
+       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-volume:/data/db
 
 volumes:
-  volume:
+  db-volume:
+  mongo-volume:

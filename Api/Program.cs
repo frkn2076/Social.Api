@@ -1,4 +1,5 @@
 using Api;
+using Api.Chat;
 using Api.Middleware;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -47,6 +48,8 @@ app.UseSession();
 app.UseMiddleware<AuthenticationMiddlewareForRefreshToken>();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.UseHealthChecks("/health");
 

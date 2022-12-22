@@ -1,3 +1,4 @@
+using Api.Data.NoSql.Contracts;
 using Api.Infra;
 using Api.Service.Contracts;
 using Api.Utils.Constants;
@@ -108,6 +109,15 @@ public class ActivityController : ExtendedControllerBase
     public async Task<IActionResult> FilterActivityAsync(ActivityFilterRequestModel request)
     {
         var response = await _activityService.GetActivitiesRandomlyByFilterAsync(RANDOM_ACTIVITY_COUNT, request.Key, request.FromDate, request.ToDate, request.FromCapacity, request.ToCapacity, request.Categories);
+
+        return HandleServiceResponse(response);
+    }
+
+
+    [HttpGet("messages/{roomid}")]
+    public async Task<IActionResult> GetRoomMessages(int roomId)
+    {
+        var response = await _activityService.GetRoomMessages(roomId);
 
         return HandleServiceResponse(response);
     }
