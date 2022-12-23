@@ -39,7 +39,7 @@ public class ChatHub : Hub
             };
 
             await _socialRepository.CreateChatMessageAsync(chatMessage);
-            await Clients.Group(roomId).SendAsync("GroupSendMessage", message);
+            await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("GroupSendMessage", message);
         }
         catch (Exception e)
         {
