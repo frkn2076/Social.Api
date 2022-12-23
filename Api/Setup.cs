@@ -37,7 +37,7 @@ public static class Setup
         services.Configure<AdminCredentials>(builder.Configuration.GetSection(nameof(AdminCredentials)));
 
         services.AddScoped<ISocialRepository, SocialRepository>();
-        services.AddScoped<IMongoDBRepository, MongoDBRepository>();
+        //services.AddScoped<IMongoDBRepository, MongoDBRepository>();
 
         services.AddTransient<IActivityService, ActivityService>();
         services.AddTransient<IAuthenticationService, AuthenticationService>();

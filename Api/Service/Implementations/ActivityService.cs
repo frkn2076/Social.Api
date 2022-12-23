@@ -12,12 +12,10 @@ namespace Api.Service.Implementations;
 public class ActivityService : IActivityService
 {
     private readonly ISocialRepository _socialRepository;
-    private readonly IMongoDBRepository _mongoDBRepository;
 
-    public ActivityService(ISocialRepository socialRepository, IMongoDBRepository mongoDBRepository)
+    public ActivityService(ISocialRepository socialRepository)
     {
         _socialRepository = socialRepository;
-        _mongoDBRepository = mongoDBRepository;
     }
 
     public async Task<ServiceResponse<IEnumerable<Activity>>> GetActivitiesByFilterPaginationAsync(int skip, int count, string key, DateTime fromDate, DateTime toDate, int fromCapacity, int toCapacity, List<string> categories)
