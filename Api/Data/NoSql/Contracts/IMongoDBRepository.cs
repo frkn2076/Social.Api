@@ -4,5 +4,5 @@ public interface IMongoDBRepository
 {
     Task InsertMessage(string message);
 
-    Task<string> GetMessages(int roomId);
+    Task<List<object>?> GetMessages(int roomId);
 }

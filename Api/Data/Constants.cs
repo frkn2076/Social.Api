@@ -37,5 +37,9 @@ public static class Constants
         public static string GetActivityByIdQuery = nameof(GetActivityByIdQuery);
 
         public static string GetUsersByActivityIdQuery = nameof(GetUsersByActivityIdQuery);
+
+        public static string CreateChatMessageQuery = nameof(CreateChatMessageQuery);
+
+        public static string GetChatMessagesByActivityIdQuery = nameof(GetChatMessagesByActivityIdQuery);
     }
 }

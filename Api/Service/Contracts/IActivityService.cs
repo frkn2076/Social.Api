@@ -1,4 +1,5 @@
-﻿using Api.Data.Entities;
+﻿using Api.Chat;
+using Api.Data.Entities;
 using Api.Infra;
 using Api.ViewModels.Response;
 
@@ -20,5 +21,5 @@ public interface IActivityService
 
     Task<ServiceResponse<bool>> CreateActivityAsync(string title, string detail, string location, DateTime? date, string phoneNumber, int capacity, string category, int userId);
 
-    Task<ServiceResponse<string>> GetRoomMessages(int roomId);
+    Task<ServiceResponse<IEnumerable<Message>>> GetRoomMessages(int roomId);
 }

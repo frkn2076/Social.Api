@@ -1,4 +1,5 @@
-﻿using Api.Data.Entities;
+﻿using Api.Chat;
+using Api.Data.Entities;
 using Api.Data.NoSql.Contracts;
 using Api.Data.Repositories.Contracts;
 using Api.Infra;
@@ -169,11 +170,27 @@ public class ActivityService : IActivityService
         }
     }
 
-    public async Task<ServiceResponse<string>> GetRoomMessages(int roomId)
+    public async Task<ServiceResponse<IEnumerable<Message>>> GetRoomMessages(int roomId)
     {
         try
         {
-            var messages = await _mongoDBRepository.GetMessages(roomId);
+            var chatMessages = await _socialRepository.GetChatMessagesByActivityIdQueryAsync(roomId);
+
+            var messages = chatMessages.Select(x => new Message
+            {
+                Author = new Author()
+                {
+                    Id = x.AuthorId,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                },
+                CreatedAt = x.CreatedAt,
+                Status = x.Status,
+                Text = x.Text,
+                Type = x.Type,
+                Id = x.MessageId
+            });
+
             return new()
             {
                 IsSuccessful = true,

@@ -28,4 +28,8 @@ public interface ISocialRepository
     Task<Activity> GetActivityByIdAsync(int activityId, IDbTransaction transaction = null);
 
     Task<IEnumerable<Profile>> GetUsersByActivityIdQueryAsync(int activityId, IDbTransaction transaction = null);
+
+    Task<ChatMessage> CreateChatMessageAsync(ChatMessage chatMessage, IDbTransaction transaction = null);
+
+    Task<IEnumerable<ChatMessage>> GetChatMessagesByActivityIdQueryAsync(int activityId, IDbTransaction transaction = null);
 }

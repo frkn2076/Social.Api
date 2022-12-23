@@ -1,6 +1,8 @@
-﻿using Api.Data.NoSql.Contracts;
+﻿using Api.Data.Entities;
+using Api.Data.NoSql.Contracts;
 using Api.Data.Repositories.Contracts;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Api.Chat;
@@ -8,12 +10,10 @@ namespace Api.Chat;
 public class ChatHub : Hub
 {
     private readonly ISocialRepository _socialRepository;
-    private readonly IMongoDBRepository _mongoDBRepository;
 
-    public ChatHub(ISocialRepository socialRepository, IMongoDBRepository mongoDBRepository)
+    public ChatHub(ISocialRepository socialRepository)
     {
         _socialRepository = socialRepository;
-        _mongoDBRepository = mongoDBRepository;
     }
 
     public async Task GroupSendMessage(string message)
@@ -23,7 +23,22 @@ public class ChatHub : Hub
             var roomId = JObject.Parse(message)["id"].ToString();
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
-            await _mongoDBRepository.InsertMessage(message);
+            var convertedMessage = JsonConvert.DeserializeObject<Message>(message);
+
+            ChatMessage chatMessage = new ChatMessage()
+            {
+                AuthorId = convertedMessage.Author.Id,
+                FirstName = convertedMessage.Author.FirstName,
+                LastName = convertedMessage.Author.LastName,
+                MessageId = convertedMessage.Id,
+                CreatedAt = convertedMessage.CreatedAt,
+                ActivityId = 1,
+                Status = convertedMessage.Status,
+                Text = convertedMessage.Text,
+                Type = convertedMessage.Type
+            };
+
+            await _socialRepository.CreateChatMessageAsync(chatMessage);
             await Clients.Group(roomId).SendAsync("GroupSendMessage", message);
         }
         catch (Exception e)

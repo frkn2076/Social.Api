@@ -37,7 +37,7 @@ public class ActivityController : ExtendedControllerBase
     [HttpPost("pagination")]
     public async Task<IActionResult> GetActivities(ActivityPaginationFilterRequestModel request)
     {
-        var skip = isFilterChanged(request) ? 0 : HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
+        var skip = IsFilterChanged(request) ? 0 : HttpContext.Session.GetInt32(SessionItems.ActivitySkipKey) ?? 0;
 
         var response = await _activityService.GetActivitiesByFilterPaginationAsync(skip, ACTIVITY_PAGINATION_COUNT, request.Key,
             request.FromDate, request.ToDate, request.FromCapacity, request.ToCapacity, request.Categories);
@@ -124,7 +124,7 @@ public class ActivityController : ExtendedControllerBase
 
     #region Helper
 
-    private bool isFilterChanged(ActivityPaginationFilterRequestModel request)
+    private bool IsFilterChanged(ActivityPaginationFilterRequestModel request)
     {
         var key = HttpContext.Session.GetString(SessionItems.SearchKeyFilterKey);
         var fromDate = HttpContext.Session.GetString(SessionItems.FromDateFilterKey);

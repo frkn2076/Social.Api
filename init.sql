@@ -25,3 +25,16 @@ CREATE TABLE IF NOT EXISTS profile_activity (
     activityId NUMERIC (7) NOT NULL,
     profileId NUMERIC (7) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS public.chat_message (
+    id serial PRIMARY KEY,
+    authorId VARCHAR (50) NOT NULL,
+    firstName VARCHAR (50) NOT NULL,
+    lastName VARCHAR (50) NULL,
+    createdAt NUMERIC (15) NOT NULL,
+    messageId VARCHAR (50) NULL,
+    status VARCHAR (50) NULL,
+    text VARCHAR (1000) NULL,
+    type VARCHAR (50) NULL,
+    activityId NUMERIC (7) NOT NULL
+);

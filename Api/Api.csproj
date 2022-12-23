@@ -28,6 +28,9 @@
 		<None Update="Data\Sql\Adhoc\CreateActivityQuery.sql">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Data\Sql\Adhoc\CreateChatMessageQuery.sql">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Data\Sql\Adhoc\CreateProfileQuery.sql">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -57,6 +60,9 @@
 		</None>
 		<None Update="Data\Sql\Adhoc\GetUserActivityQuery.sql">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\Sql\Adhoc\GetChatMessagesByActivityIdQuery.sql">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Data\Sql\Adhoc\GetUsersByActivityIdQuery.sql">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

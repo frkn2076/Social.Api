@@ -128,6 +128,26 @@ public class SocialRepository : ISocialRepository
         }
     }
 
+    public async Task<ChatMessage> CreateChatMessageAsync(ChatMessage chatMessage, IDbTransaction transaction = null)
+    {
+        using (var connection = new NpgsqlConnection(_connectionString))
+        {
+            connection.Open();
+            return await connection.QueryFirstOrDefaultAsync<ChatMessage>(GetQuery(Constants.Queries.CreateChatMessageQuery),
+                chatMessage, transaction: transaction);
+        }
+    }
+
+    public async Task<IEnumerable<ChatMessage>> GetChatMessagesByActivityIdQueryAsync(int activityId, IDbTransaction transaction = null)
+    {
+        using (var connection = new NpgsqlConnection(_connectionString))
+        {
+            connection.Open();
+            return await connection.QueryAsync<ChatMessage>(GetQuery(Constants.Queries.GetChatMessagesByActivityIdQuery),
+                new { activityId }, transaction: transaction);
+        }
+    }
+
     #region Helper
 
     private string GetQuery(string queryFileName)
