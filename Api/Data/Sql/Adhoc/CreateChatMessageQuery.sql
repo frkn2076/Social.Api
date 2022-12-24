@@ -7,6 +7,11 @@
 		  , status
 		  , text
 		  , type
+		  , height
+		  , width
+		  , image_name
+		  , size
+		  , uri
 		  , activityid)
 	 VALUES 
 	      ( @authorId
@@ -17,5 +22,10 @@
 		  , @status
 		  , @text
 		  , @type
+		  , @height
+		  , @width
+		  , @imageName
+		  , @size
+		  , @uri
 		  , @activityId)
   RETURNING *

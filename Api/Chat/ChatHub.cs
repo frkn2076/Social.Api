@@ -44,7 +44,12 @@ public class ChatHub : Hub
                 ActivityId = Convert.ToInt32(convertedMessage.Id),
                 Status = convertedMessage.Status,
                 Text = convertedMessage.Text,
-                Type = convertedMessage.Type
+                Type = convertedMessage.Type,
+                Height = convertedMessage.Height,
+                Width = convertedMessage.Width,
+                ImageName = convertedMessage.Name,
+                Size = convertedMessage.Size,
+                Uri = convertedMessage.Uri
             };
 
             await _socialRepository.CreateChatMessageAsync(chatMessage);

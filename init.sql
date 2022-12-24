@@ -33,8 +33,13 @@ CREATE TABLE IF NOT EXISTS public.chat_message (
     lastName VARCHAR (50) NULL,
     createdAt NUMERIC (15) NOT NULL,
     messageId VARCHAR (50) NULL,
-    status VARCHAR (50) NULL,
+    status VARCHAR (50) NOT NULL,
     text VARCHAR (1000) NULL,
     type VARCHAR (50) NULL,
+    height NUMERIC (7) NULL,
+    width NUMERIC (7) NULL,
+    image_name VARCHAR (200) NULL,
+    size NUMERIC (7) NULL,
+    uri VARCHAR (200) NULL,
     activityId NUMERIC (7) NOT NULL
 );

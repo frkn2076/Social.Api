@@ -1,7 +1,4 @@
-﻿using Api.Helper;
-using Newtonsoft.Json;
-
-namespace Api.Data.Entities;
+﻿namespace Api.Data.Entities;
 
 public class ChatMessage
 {
@@ -22,6 +19,16 @@ public class ChatMessage
     public string Text { get; set; }
 
     public string Type { get; set; }
+
+    public int Height { get; set; }
+    
+    public int Width { get; set; }
+
+    public string ImageName { get; set; }
+
+    public int Size { get; set; }
+
+    public string Uri { get; set; }
 
     public int ActivityId { get; set; }
 }
