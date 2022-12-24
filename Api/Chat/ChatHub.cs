@@ -1,5 +1,4 @@
 ﻿using Api.Data.Entities;
-using Api.Data.NoSql.Contracts;
 using Api.Data.Repositories.Contracts;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
@@ -16,13 +15,23 @@ public class ChatHub : Hub
         _socialRepository = socialRepository;
     }
 
+    public async Task JoinGroup(string activityId)
+    {
+        try
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, activityId);
+        }
+        catch (Exception e)
+        {
+            // log here
+            throw;
+        }
+    }
+
     public async Task GroupSendMessage(string message)
     {
         try
         {
-            var roomId = JObject.Parse(message)["id"].ToString();
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-
             var convertedMessage = JsonConvert.DeserializeObject<Message>(message);
 
             ChatMessage chatMessage = new ChatMessage()
@@ -32,20 +41,20 @@ public class ChatHub : Hub
                 LastName = convertedMessage.Author.LastName,
                 MessageId = convertedMessage.Id,
                 CreatedAt = convertedMessage.CreatedAt,
-                ActivityId = 1,
+                ActivityId = Convert.ToInt32(convertedMessage.Id),
                 Status = convertedMessage.Status,
                 Text = convertedMessage.Text,
                 Type = convertedMessage.Type
             };
 
             await _socialRepository.CreateChatMessageAsync(chatMessage);
-            await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("GroupSendMessage", message);
+            await Clients.GroupExcept(convertedMessage.Id, Context.ConnectionId).SendAsync("GroupSendMessage", message);
         }
         catch (Exception e)
         {
-
+            //log here
             throw;
         }
-        
+
     }
 }
