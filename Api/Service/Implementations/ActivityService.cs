@@ -186,7 +186,12 @@ public class ActivityService : IActivityService
                 Status = x.Status,
                 Text = x.Text,
                 Type = x.Type,
-                Id = x.MessageId
+                Id = x.MessageId,
+                Height = x.Height,
+                Width = x.Width,
+                Name = x.ImageName,
+                Uri = x.Uri,
+                Size = x.Size
             });
 
             return new()
