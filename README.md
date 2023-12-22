@@ -21,10 +21,6 @@
   | Get activities        | GET           | activity/all/{isRefresh?} |
   | Get user's activities | GET           | profile/private/all       |
   | Update user's profile | PUT           | profile/private           |
-* ### Admin
-  | Service               | Method        | Endpoint                  |
-  | --------------------- |:-------------:| ------------------------- |
-  |                       |               |                           |
 
 <br>
 
