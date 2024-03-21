@@ -36,8 +36,8 @@
  * Docker
 
 ## Docker command to run postgres && mongodb locally:
- docker run -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=example -e POSTGRES_DB=my_db -d postgres:13-alpine
- docker run -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example -d mongo
+ * docker run -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=example -e POSTGRES_DB=my_db -d postgres:13-alpine
+ * docker run -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example -d mongo
 
 ## Https Certificate
- dotnet dev-certs https -ep %USERPROFILE%\.aspnet\https\httpscertificate.pfx -p sEcREtpaSsWord
+ * dotnet dev-certs https -ep %USERPROFILE%\.aspnet\https\httpscertificate.pfx -p sEcREtpaSsWord
